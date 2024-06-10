@@ -6,22 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "App",
-            "request": "launch",
-            "mainClass": "App",
-            "projectName": "Amazon_d3fad3b6",
-            "vmArgs": "--module-path C:/javafx-sdk-20.0.1/lib --add-modules javafx.controls,javafx.fxml"
-        },
-        {
-            "type": "java",
-            "name": "App",
-            "request": "launch",
-            "mainClass": "App",
-            "projectName": "Amazon-Resolve_ffe2bcd9",
-            "vmArgs": "--module-path C:/javafx-sdk-20.0.1/lib --add-modules javafx.controls,javafx.media --add-modules=javafx.controls,javafx.fxml"
-        },
-        {
-            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -31,8 +15,8 @@
             "name": "App",
             "request": "launch",
             "mainClass": "App",
-            "projectName": "Amazon-Resolve_cb922bef",
-            "vmArgs": "--module-path C:/javafx-sdk-20.0.1/lib --add-modules javafx.controls,javafx.media --add-modules=javafx.controls,javafx.fxml"
+            "projectName": "Amazon_1d511585",
+            "vmArgs": "--module-path C:/javafx-sdk-22.0.1/lib --add-modules javafx.controls,javafx.media --add-modules=javafx.controls,javafx.fxml"
         }
     ]
 }
