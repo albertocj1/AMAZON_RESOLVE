@@ -33,7 +33,7 @@
             <Font name="Arial Bold" size="15.63" />
          </font>
       </Text>
-      <TextField layoutX="70.0" layoutY="344.0" prefHeight="55.47" prefWidth="425.0" promptText="Enter Username" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+      <TextField fx:id="usernameField" layoutX="70.0" layoutY="344.0" prefHeight="55.47" prefWidth="425.0" promptText="Enter Username" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
@@ -43,7 +43,7 @@
             <Font name="Arial Bold" size="15.63" />
          </font>
       </Text>
-      <PasswordField layoutX="71.0" layoutY="447.0" prefHeight="55.0" prefWidth="425.0" promptText="Enter Password" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+      <PasswordField fx:id="passwordField" layoutX="71.0" layoutY="447.0" prefHeight="55.0" prefWidth="425.0" promptText="Enter Password" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
@@ -61,7 +61,6 @@
             <Image url="@../Icons/screenshot-1717922481862.png" />
          </image>
       </ImageView>
-      <Button fx:id="admin" layoutX="71.0" layoutY="529.0" mnemonicParsing="false" onAction="#gotoAdmin" opacity="0.0" prefHeight="55.0" prefWidth="174.0" text="Button" />
-      <Button fx:id="dept" layoutX="330.0" layoutY="529.0" mnemonicParsing="false" onAction="#gotoDept" opacity="0.0" prefHeight="55.0" prefWidth="168.0" text="Button" />
+      <Button fx:id="dept" layoutX="73.0" layoutY="529.0" mnemonicParsing="false" onAction="#login" opacity="0.0" prefHeight="55.0" prefWidth="425.0" text="Button" />
    </children>
 </Pane>
