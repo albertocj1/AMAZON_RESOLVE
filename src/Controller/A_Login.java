@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -14,7 +16,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class A_Login {
@@ -53,7 +54,7 @@ public class A_Login {
 
         } else if (username.equals("dept001") && password.equals("dept123!@#")) {
 
-            
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/View/Order_Dept.fxml"));
             Scene scene = new Scene(root);
@@ -61,7 +62,7 @@ public class A_Login {
             stage.show();
 
         } else {
-            errorText.setText("Invalid username or password. Please try again.");
+           showErrorAlert("Invalid username or password. Please try again.");
         }
     }
 
@@ -86,4 +87,11 @@ public class A_Login {
         stage.setScene(scene);
         stage.show();
     }
+    private void showErrorAlert(String message) {
+     Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+         alert.showAndWait();
+}
 }
