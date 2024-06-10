@@ -9,6 +9,15 @@
             "name": "App",
             "request": "launch",
             "mainClass": "App",
+            "projectName": "Amazon_654e2c44",
+            "vmArgs": "--module-path C:/javafx-sdk-20.0.1/lib --add-modules javafx.controls,javafx.fxml"
+
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
             "projectName": "Amazon_d3fad3b6",
             "vmArgs": "--module-path C:/javafx-sdk-20.0.1/lib --add-modules javafx.controls,javafx.fxml"
         },
