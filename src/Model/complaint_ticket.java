@@ -8,15 +8,16 @@ public class complaint_ticket {
     int admin_ID;
     String compt_Subject;
     String compt_Desc;
-    int compt_OrderID;
+    String compt_OrderID;
     String compt_Category;
     String compt_ProdInfo;
     int compt_CustServRate;
     String compt_Status;
     boolean compt_DropOffSched;
     Date compt_CreatedDate;
+    String compt_Dept;
 
-    public complaint_ticket(int compt_ID, int complainant_ID, int admin_ID, String compt_Subject, String compt_Desc, int compt_OrderID, String compt_Category, String compt_ProdInfo, int compt_CustServRate, String compt_Status, boolean compt_DropOffSched, Date compt_CreatedDate) {
+    public complaint_ticket(int compt_ID, int complainant_ID, int admin_ID, String compt_Subject, String compt_Desc, String compt_OrderID, String compt_Category, String compt_ProdInfo, int compt_CustServRate, String compt_Status, boolean compt_DropOffSched, Date compt_CreatedDate, String compt_Dept) {
         this.compt_ID = compt_ID;
         this.complainant_ID = complainant_ID;
         this.admin_ID = admin_ID;
@@ -29,6 +30,7 @@ public class complaint_ticket {
         this.compt_Status = compt_Status;
         this.compt_DropOffSched = compt_DropOffSched;
         this.compt_CreatedDate = compt_CreatedDate;
+        this.compt_Dept = compt_Dept;
     }
 
     public int getCompt_ID() {
@@ -71,11 +73,11 @@ public class complaint_ticket {
         this.compt_Desc = compt_Desc;
     }
 
-    public int getCompt_OrderID() {
+    public String getCompt_OrderID() {
         return compt_OrderID;
     }
 
-    public void setCompt_OrderID(int compt_OrderID) {
+    public void setCompt_OrderID(String compt_OrderID) {
         this.compt_OrderID = compt_OrderID;
     }
 
@@ -127,7 +129,12 @@ public class complaint_ticket {
         this.compt_CreatedDate = compt_CreatedDate;
     }
 
+    public String getCompt_Dept() {
+        return compt_Dept;
+    }
 
+    public void setCompt_Dept(String compt_Dept) {
+        this.compt_Dept = compt_Dept;
+    }
 
-    
 }

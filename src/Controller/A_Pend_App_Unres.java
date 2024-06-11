@@ -1,5 +1,6 @@
 package Controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,6 +30,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.Observable;
+
+import com.mysql.cj.xdevapi.Statement;
 
 
 public class A_Pend_App_Unres {
@@ -87,10 +90,15 @@ public class A_Pend_App_Unres {
     complaint_ticket complaint_ticket = null;
 
     ObservableList<complaint_ticket> complaint_ticketList = null;
+    private int complainantID;
+    private int adminID = 1;
 
 
     public void initialize(){
         loadPData();
+        addSubject.setItems(FXCollections.observableArrayList("Missing Item", "Order not Processed Correctly", "Damaged Item"));
+        addDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
+        addCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
 
     }
 
@@ -133,7 +141,8 @@ public class A_Pend_App_Unres {
                         resultSet.getInt("complaint_CustServRate"),
                         resultSet.getString("complaint_Status"),
                         resultSet.getBoolean("complaint_DropOffSched"),
-                        resultSet.getDate("complaint_CreatedDate")
+                        resultSet.getDate("complaint_CreatedDate"),
+                        resultSet.getString("complaint_Dept")
                     ));
                 }
                     pendingTable.setItems(complaint_ticketList);
@@ -154,7 +163,27 @@ public class A_Pend_App_Unres {
         }
     }
 
+    public void createComplainant(ActionEvent event) {
+        try (Connection connection = DbConnect.getConnect()) {
+            gotoTicket1();
+            System.out.println("Connected to database.");
+            String defaultInsertQuery = "INSERT INTO complainant (complainant_FName, complainant_MName, complainant_LName, complainant_ContactNum, complainant_EmailAdd, complainant_HouseNum, complainant_Brgy, complainant_Street, complainant_City) VALUES ('Default', 'Default', 'Default', '0000000000', 'default@example.com', '0', 'Default', 'Default', 'Default')";
+
+            try (PreparedStatement statement = connection.prepareStatement(defaultInsertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    complainantID = generatedKeys.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Complainant ID: " + complainantID);
+    }
+
     public void addComplaint(ActionEvent event) {
+        System.out.println(complainantID);
         try {
             String FName = addFName.getText();
             String MName = addMName.getText();
@@ -171,36 +200,42 @@ public class A_Pend_App_Unres {
             String OrderID = addOrderID.getText();
             String Category = addCategory.getValue();
             LocalDate Date = addDate.getValue();
-        try (Connection connection = DbConnect.getConnect()){
 
-            String complainantInsertquery = "INSERT INTO complainant (complainant_FName, complainant_MName, complainant_LName, complainant_ContactNum, complainant_EmailAdd, complainant_HouseNum, complainant_Brgy, complainant_Street, complainant_City) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (Connection connection = DbConnect.getConnect()) {
+                // Update complainant details
+                String complainantUpdateQuery = "UPDATE complainant SET complainant_FName = ?, complainant_MName = ?, complainant_LName = ?, complainant_ContactNum = ?, complainant_EmailAdd = ?, complainant_HouseNum = ?, complainant_Brgy = ?, complainant_Street = ?, complainant_City = ? WHERE complainant_ID = " + complainantID;
+                
+                try (PreparedStatement complainantStatement = connection.prepareStatement(complainantUpdateQuery)) {
+                    complainantStatement.setString(1, FName);
+                    complainantStatement.setString(2, MName);
+                    complainantStatement.setString(3, LName);
+                    complainantStatement.setString(4, ContactNum);
+                    complainantStatement.setString(5, EmailAddress);
+                    complainantStatement.setString(6, HouseNum);
+                    complainantStatement.setString(7, Brgy);
+                    complainantStatement.setString(8, Street);
+                    complainantStatement.setString(9, City);
+                    complainantStatement.executeUpdate();
+                }
 
-            try (PreparedStatement complainantStatement = connection.prepareStatement(complainantInsertquery)) {
-                complainantStatement.setString(1, FName);
-                complainantStatement.setString(2, MName);
-                complainantStatement.setString(3, LName);
-                complainantStatement.setString(4, ContactNum);
-                complainantStatement.setString(5, EmailAddress);
-                complainantStatement.setString(6, HouseNum);
-                complainantStatement.setString(7, Brgy);
-                complainantStatement.setString(8, Street);
-                complainantStatement.setString(9, City);
-                complainantStatement.executeUpdate();
+                // Insert complaint ticket
+                String complaint_ticketInsertQuery = "INSERT INTO complaint_ticket (complainant_ID, admin_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_ProdInfo, compt_CustServRate, compt_Status, compt_DropOffSched, compt_CreatedDate, compt_Dept) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 'Approved', false, ?, ?)";
+
+                try (PreparedStatement complaint_ticketStatement = connection.prepareStatement(complaint_ticketInsertQuery)) {
+                    complaint_ticketStatement.setInt(1, complainantID);
+                    complaint_ticketStatement.setInt(2, adminID);
+                    complaint_ticketStatement.setString(3, Subject);
+                    complaint_ticketStatement.setString(4, Description);
+                    complaint_ticketStatement.setString(5, OrderID);
+                    complaint_ticketStatement.setString(6, Category);
+                    complaint_ticketStatement.setString(7, "Product Info");
+                    complaint_ticketStatement.setDate(8, java.sql.Date.valueOf(Date));
+                    complaint_ticketStatement.setString(9, Dept);
+
+
+                    complaint_ticketStatement.executeUpdate();
+                }
             }
-
-            String complaint_ticketInsertquery = "INSERT INTO complaint_ticket (compt_Subject, compt_Desc, compt_OrderID, compt_Category, comt_CreatedDate) VALUES (?, ?, ?, ?, ?)";
-
-            try (PreparedStatement complaint_ticketStatement = connection.prepareStatement(complaint_ticketInsertquery)) {
-                complaint_ticketStatement.setString(1, Subject);
-                complaint_ticketStatement.setString(2, Description);
-                complaint_ticketStatement.setString(3, OrderID);
-                complaint_ticketStatement.setString(4, Category);
-                complaint_ticketStatement.setDate(5, java.sql.Date.valueOf(Date));
-                complaint_ticketStatement.executeUpdate();
-            }
-
-
-        }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -263,7 +298,7 @@ public class A_Pend_App_Unres {
     }
 
     @FXML
-    public void gotoTicket1(ActionEvent event) throws IOException {
+    public void gotoTicket1(){
         pendingpane.setVisible(false);
         newTicket1.setVisible(true);
     }
