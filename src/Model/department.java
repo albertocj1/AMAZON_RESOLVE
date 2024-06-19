@@ -1,5 +1,10 @@
 package Model;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class department {
     int dept_ID;
     String dept_Head;
@@ -44,6 +49,8 @@ public class department {
     public void setDept_Description(String dept_Description) {
         this.dept_Description = dept_Description;
     }
+
+    
 
     
 }

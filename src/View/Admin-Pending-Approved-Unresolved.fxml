@@ -959,7 +959,7 @@
             <Button layoutX="787.0" layoutY="630.0" mnemonicParsing="false" onAction="#gotoTicket2" opacity="0.0" prefHeight="43.0" prefWidth="40.0" text="Button" />
          </children>
       </Pane>
-      <Pane fx:id="newTicket2" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;">
+      <Pane fx:id="newTicket2" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;" visible="false">
          <children>
             <Rectangle arcHeight="17.0" arcWidth="17.0" fill="WHITE" height="688.0" layoutX="25.0" layoutY="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="856.0" />
             <Line endX="720.0" endY="-20.333343505859375" layoutX="161.0" layoutY="102.0" startX="-135.99996948242188" startY="-20.333343505859375" stroke="#484747" strokeWidth="0.3" />

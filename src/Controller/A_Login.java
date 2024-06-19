@@ -45,7 +45,6 @@ public class A_Login {
 
         if (username.equals("admin001") && password.equals("admin123!@#")) {
 
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/View/Admin-Dashboard.fxml"));
             Scene scene = new Scene(root);

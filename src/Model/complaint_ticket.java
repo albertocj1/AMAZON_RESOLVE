@@ -13,11 +13,10 @@ public class complaint_ticket {
     String compt_ProdInfo;
     int compt_CustServRate;
     String compt_Status;
-    boolean compt_DropOffSched;
     Date compt_CreatedDate;
     String compt_Dept;
 
-    public complaint_ticket(int compt_ID, int complainant_ID, int admin_ID, String compt_Subject, String compt_Desc, String compt_OrderID, String compt_Category, String compt_ProdInfo, int compt_CustServRate, String compt_Status, boolean compt_DropOffSched, Date compt_CreatedDate, String compt_Dept) {
+    public complaint_ticket(int compt_ID, int complainant_ID, int admin_ID, String compt_Subject, String compt_Desc, String compt_OrderID, String compt_Category, String compt_ProdInfo, int compt_CustServRate, String compt_Status, Date compt_CreatedDate, String compt_Dept) {
         this.compt_ID = compt_ID;
         this.complainant_ID = complainant_ID;
         this.admin_ID = admin_ID;
@@ -28,7 +27,6 @@ public class complaint_ticket {
         this.compt_ProdInfo = compt_ProdInfo;
         this.compt_CustServRate = compt_CustServRate;
         this.compt_Status = compt_Status;
-        this.compt_DropOffSched = compt_DropOffSched;
         this.compt_CreatedDate = compt_CreatedDate;
         this.compt_Dept = compt_Dept;
     }
@@ -111,14 +109,6 @@ public class complaint_ticket {
 
     public void setCompt_Status(String compt_Status) {
         this.compt_Status = compt_Status;
-    }
-
-    public boolean isCompt_DropOffSched() {
-        return compt_DropOffSched;
-    }
-
-    public void setCompt_DropOffSched(boolean compt_DropOffSched) {
-        this.compt_DropOffSched = compt_DropOffSched;
     }
 
     public Date getCompt_CreatedDate() {

@@ -20,7 +20,7 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/View/Admin-Dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/View/Login.fxml"));
             Scene scene = new Scene(root);
             stage.getIcons().add(new Image("/Icons/Logo.png"));
             stage.setScene(scene);
