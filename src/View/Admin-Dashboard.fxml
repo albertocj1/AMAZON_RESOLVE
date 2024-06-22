@@ -101,5 +101,11 @@
       </ImageView>
       <Button layoutX="15.0" layoutY="170.0" mnemonicParsing="false" onAction="#gotoTicket" opacity="0.0" prefHeight="25.0" prefWidth="178.0" text="Button" />
       <Button layoutX="15.0" layoutY="228.0" mnemonicParsing="false" onAction="#gotoHistory" opacity="0.0" prefHeight="25.0" prefWidth="178.0" text="Button" />
+      <ImageView fitHeight="25.0" fitWidth="23.0" layoutX="29.0" layoutY="761.0" rotate="180.0">
+         <image>
+            <Image url="@../Icons/logout.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="25.0" layoutY="761.0" mnemonicParsing="false" onAction="#gotoLogin" opacity="0.0" text="Button" />
    </children>
 </Pane>

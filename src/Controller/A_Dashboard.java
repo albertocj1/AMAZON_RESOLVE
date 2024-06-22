@@ -32,4 +32,15 @@ public class A_Dashboard {
         stage.setScene(scene);
         stage.show();
     }
+
+    @FXML
+    public void gotoLogin(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Login.fxml"));
+        Parent root = loader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }

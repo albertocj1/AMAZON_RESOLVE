@@ -23,7 +23,7 @@
             <Image url="@../Icons/Logo.png" />
          </image>
       </ImageView>
-      <TextField layoutX="248.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.15" prefWidth="343.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
+      <TextField fx:id="searchTextField" layoutX="248.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleSearch" prefHeight="37.15" prefWidth="343.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
       <Line endX="1023.0" layoutX="101.0" layoutY="69.0" startX="-100.0" stroke="#e5e5e5" strokeWidth="0.5" />
       <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#ff9900" height="35.0" layoutX="-12.0" layoutY="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="19.0" />
       <Rectangle arcHeight="17.0" arcWidth="17.0" fill="#ff990037" height="35.0" layoutX="22.0" layoutY="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="178.0" />
@@ -106,21 +106,20 @@
             <ChoiceBox layoutX="188.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
             <ChoiceBox layoutX="347.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
             <DatePicker layoutX="505.0" layoutY="193.0" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
-            <TableView layoutX="29.0" layoutY="232.0" prefHeight="477.0" prefWidth="844.0">
+            <TableView fx:id="pendingTable" layoutX="29.0" layoutY="232.0" prefHeight="477.0" prefWidth="844.0">
               <columns>
-                  <TableColumn prefWidth="89.0" text="Complaint ID" />
-                  <TableColumn prefWidth="100.0" text="Complainant ID" />
-                  <TableColumn prefWidth="154.0" text="Subject" />
-                <TableColumn prefWidth="157.0" text="Description" />
-                <TableColumn prefWidth="110.0" text="Order ID" />
-                  <TableColumn prefWidth="108.0" text="Category" />
-                  <TableColumn prefWidth="125.0" text="Created Date" />
+                  <TableColumn fx:id="PcomplaintIDColumn" prefWidth="89.0" text="Complaint ID" />
+                  <TableColumn fx:id="PcomplainantIDColumn" prefWidth="100.0" text="Complainant ID" />
+                  <TableColumn fx:id="PsubjectColumn" prefWidth="154.0" text="Subject" />
+                <TableColumn fx:id="PdescriptionColumn" prefWidth="157.0" text="Description" />
+                <TableColumn fx:id="PorderIDColumn" prefWidth="110.0" text="Order ID" />
+                  <TableColumn fx:id="PcategoryColumn" prefWidth="108.0" text="Category" />
+                  <TableColumn fx:id="PcreatedDateColumn" prefWidth="125.0" text="Created Date" />
               </columns>
             </TableView>
             <Button layoutX="162.0" layoutY="103.0" mnemonicParsing="false" onAction="#gotoApproved" opacity="0.0" prefHeight="25.0" prefWidth="81.0" text="Button" />
             <Button layoutX="277.0" layoutY="102.0" mnemonicParsing="false" onAction="#gotoUnresolved" opacity="0.0" prefHeight="25.0" prefWidth="81.0" text="Button" />
-            <Button layoutX="797.0" layoutY="26.0" mnemonicParsing="false" onAction="#gotoTicket1" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
-            <Button layoutX="28.0" layoutY="231.0" mnemonicParsing="false" onAction="#gotoPendingPrev" opacity="0.0" prefHeight="25.0" prefWidth="844.0" text="Button" />
+            <Button layoutX="797.0" layoutY="26.0" mnemonicParsing="false" onAction="#createComplainant" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
          </children></Pane>
       <Pane fx:id="approvedpane" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;" visible="false">
          <children>
@@ -854,7 +853,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="73.0" layoutY="246.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addFName" layoutX="73.0" layoutY="246.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -864,7 +863,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="74.0" layoutY="322.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addMName" layoutX="74.0" layoutY="322.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -874,7 +873,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="74.0" layoutY="398.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addLName" layoutX="74.0" layoutY="398.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -884,7 +883,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="75.0" layoutY="475.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addContactNum" layoutX="75.0" layoutY="475.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -894,7 +893,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="75.0" layoutY="555.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addEmailAddress" layoutX="75.0" layoutY="555.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -904,7 +903,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="470.0" layoutY="246.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addHouseNum" layoutX="470.0" layoutY="246.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -914,7 +913,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="471.0" layoutY="322.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addBrgy" layoutX="471.0" layoutY="322.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -924,7 +923,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="471.0" layoutY="398.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addStreet" layoutX="471.0" layoutY="398.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -934,7 +933,7 @@
                   <Font name="Arial Bold" size="15.0" />
                </font>
             </Text>
-            <TextField layoutX="472.0" layoutY="475.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addCity" layoutX="472.0" layoutY="475.0" prefHeight="37.0" prefWidth="349.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -1012,7 +1011,7 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
             </Text>
-            <TextField layoutX="75.0" layoutY="355.0" prefHeight="91.0" prefWidth="764.0" promptText="Type your detailed description here" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
+            <TextField fx:id="addDesc" layoutX="75.0" layoutY="355.0" prefHeight="91.0" prefWidth="764.0" promptText="Type your detailed description here" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
@@ -1022,7 +1021,7 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
             </Text>
-            <TextField layoutX="75.0" layoutY="504.0" prefHeight="33.0" prefWidth="189.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 7; -fx-border-width: 0.5;">
+            <TextField fx:id="addOrderID" layoutX="75.0" layoutY="504.0" prefHeight="33.0" prefWidth="189.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-radius: 7; -fx-border-width: 0.5;">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -1062,11 +1061,11 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
             </Text>
-            <ChoiceBox layoutX="560.0" layoutY="260.0" prefHeight="33.0" prefWidth="279.0" style="-fx-background-color: F5F4F2; -fx-background-radius: 10; -fx-border-color: F5F4F2; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <DatePicker layoutX="484.0" layoutY="504.0" prefHeight="36.0" prefWidth="190.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
-            <ChoiceBox layoutX="136.0" layoutY="259.0" prefHeight="33.0" prefWidth="337.0" style="-fx-background-color: F5F4F2; -fx-background-radius: 10; -fx-border-color: F5F4F2; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox layoutX="280.0" layoutY="504.0" prefHeight="36.0" prefWidth="189.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <Button layoutX="683.0" layoutY="617.0" mnemonicParsing="false" onAction="#gotoPending" opacity="0.0" prefHeight="27.0" prefWidth="154.0" text="Button" />
+            <ChoiceBox fx:id="addDept" layoutX="560.0" layoutY="260.0" prefHeight="33.0" prefWidth="279.0" style="-fx-background-color: F5F4F2; -fx-background-radius: 10; -fx-border-color: F5F4F2; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <DatePicker fx:id="addDate" layoutX="484.0" layoutY="504.0" prefHeight="36.0" prefWidth="190.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
+            <ChoiceBox fx:id="addSubject" layoutX="136.0" layoutY="259.0" prefHeight="33.0" prefWidth="337.0" style="-fx-background-color: F5F4F2; -fx-background-radius: 10; -fx-border-color: F5F4F2; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="addCategory" layoutX="280.0" layoutY="504.0" prefHeight="36.0" prefWidth="189.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <Button layoutX="683.0" layoutY="617.0" mnemonicParsing="false" onAction="#addComplaint" opacity="0.0" prefHeight="27.0" prefWidth="154.0" text="Button" />
             <Button layoutX="820.0" layoutY="38.0" mnemonicParsing="false" onAction="#gotoPending" opacity="0.0" prefHeight="27.0" prefWidth="34.0" text="Button" />
          </children>
       </Pane>
