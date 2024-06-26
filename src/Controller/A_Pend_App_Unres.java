@@ -13,10 +13,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import Model.DbConnect;
 import Model.admin;
+import Model.complainant;
 import Model.complaint_ticket;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -144,6 +146,21 @@ public class A_Pend_App_Unres {
     @FXML
     private TableColumn <complaint_ticket, String> AdepartmentColumn;
 
+    @FXML 
+    private Label updateFirstName, updateMiddleName, updateLastName, UpdateContactNumber, updateEmailAdd, updateHouseNum, updateBrgy, updateStreet, updateCity;
+
+    @FXML
+    private Label updateOrderID, updateCategory, updateCreatedDate;
+
+    @FXML
+    private ChoiceBox <String> updateDept, updateSubject;
+
+    @FXML
+    private TextField updateDesc;
+
+    @FXML
+    private Label updateComplaintID;
+
 
     @FXML
     Pane pendingpane, approvedpane, unresolvedpane, pending_preview, unresolved_preview, confirmation_approval, confirmation_delete, newTicket1, newTicket2;
@@ -181,8 +198,82 @@ public class A_Pend_App_Unres {
         pendingSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
         pendingDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
         pendingCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
+
+        pendingTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        pendingTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                printSelectedTicketData(newSelection);
+                bindSelectedTicketData(newSelection);
+    
+                // Fetch and bind complainant data
+                complainant comp = getComplainantData(newSelection.getComplainant_ID());
+                if (comp != null) {
+                    bindSelectedComptData(comp);
+                }
+            }
+        });
     }
 
+    public void printSelectedComptData(complainant selectedRow){
+        System.out.println("Selected row data: " + selectedRow.getComplainant_ID() + ", " + selectedRow.getComplainant_FName() + ", " + selectedRow.getComplainant_MName() + ", " + selectedRow.getComplainant_LName() + ", " + selectedRow.getComplainant_ContactNum() + ", " + selectedRow.getComplainant_EmailAdd() + ", " + selectedRow.getComplainant_HouseNum() + ", " + selectedRow.getComplainant_Brgy() + ", " + selectedRow.getComplainant_Street() + ", " + selectedRow.getComplainant_City());
+    }
+
+    public void printSelectedTicketData(complaint_ticket selectedRow) {
+        System.out.println("Selected row data: " + selectedRow.getCompt_ID() + ", " + selectedRow.getComplainant_ID() + ", " + selectedRow.getCompt_Subject() + ", " + selectedRow.getCompt_Desc() + ", " + selectedRow.getCompt_OrderID() + ", " + selectedRow.getCompt_Category() + ", " + selectedRow.getCompt_CreatedDate() + ", " + selectedRow.getCompt_Dept());
+    }
+    
+    public void bindSelectedComptData(complainant selectedRow){
+        updateFirstName.setText(selectedRow.getComplainant_FName());
+        updateMiddleName.setText(selectedRow.getComplainant_MName());
+        updateLastName.setText(selectedRow.getComplainant_LName());
+        UpdateContactNumber.setText(selectedRow.getComplainant_ContactNum());
+        updateEmailAdd.setText(selectedRow.getComplainant_EmailAdd());
+        updateHouseNum.setText(selectedRow.getComplainant_HouseNum());
+        updateBrgy.setText(selectedRow.getComplainant_Brgy());
+        updateStreet.setText(selectedRow.getComplainant_Street());
+        updateCity.setText(selectedRow.getComplainant_City());
+    }
+
+    private void bindSelectedTicketData(complaint_ticket selectedRow) {
+        updateComplaintID.setText(String.valueOf(selectedRow.getCompt_ID()));
+        updateSubject.setValue(selectedRow.getCompt_Subject());
+        updateDesc.setText(selectedRow.getCompt_Desc());
+        updateOrderID.setText(selectedRow.getCompt_OrderID());
+        updateCategory.setText(selectedRow.getCompt_Category());
+        updateCreatedDate.setText(selectedRow.getCompt_CreatedDate().toString());
+        updateDept.setValue(selectedRow.getCompt_Dept());
+        
+    }
+
+    public complainant getComplainantData(int complainantID) {
+        complainant comp = null;
+        try {
+            query = "SELECT * FROM complainant WHERE complainant_ID = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, complainantID);
+            resultSet = preparedStatement.executeQuery();
+    
+            if (resultSet.next()) {
+                comp = new complainant(
+                    resultSet.getInt("complainant_ID"),
+                    resultSet.getString("complainant_FName"),
+                    resultSet.getString("complainant_MName"),
+                    resultSet.getString("complainant_LName"),
+                    resultSet.getString("complainant_ContactNum"),
+                    resultSet.getString("complainant_EmailAdd"),
+                    resultSet.getString("complainant_HouseNum"),
+                    resultSet.getString("complainant_Brgy"),
+                    resultSet.getString("complainant_Street"),
+                    resultSet.getString("complainant_City")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comp;
+    }
+    
     public void loadAData() {
         connection = DbConnect.getConnect();
 
