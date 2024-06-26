@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -63,7 +64,7 @@ public class D_Order {
     private TableColumn<resolution, Date> dateColumn;
 
     @FXML
-    private Pane resolution_details, resolution_update, resolution_approval, inProgressPane, WaitingPane, ResolvedPane, flagUnresolvable;
+    private Pane resolution_details, resolution_update, resolution_approval, inProgressPane, WaitingPane, ResolvedPane, flagUnresolvable, returnTicketPane;
 
     @FXML
     private Button AUpdate, BUpdate, CUpdate, DUpdate, EUpdate, FUpdate, confirmUpdate, cancelUpdate, confirmUpdate1, cancelUpdate1, unresolvableButton;
@@ -430,6 +431,8 @@ public class D_Order {
         refreshTableView();
         resolution_details.setVisible(false);
     }
+
+    //UNRESOLVABLE
     
     @FXML
     public void handleUnresolvableButton(ActionEvent event) {
@@ -536,7 +539,113 @@ public class D_Order {
         }
     }
     
-    
+
+    //RETURN TICKET
+    @FXML
+    public void handleReturnTicketButton(ActionEvent event) {
+        selectedResolution = orderDepartmentTable.getSelectionModel().getSelectedItem();
+        if (selectedResolution != null) {
+            String resolutionDetail = selectedResolution.getResolution_Details();
+
+            if (isResolutionDetailRestricted(resolutionDetail)) {
+                showAlert("Cannot Return Ticket", "The ticket cannot be returned because it is in the following state: " + resolutionDetail);
+            } else {
+                returnTicketPane.setVisible(true);
+            }
+        }
+    }
+
+    private boolean isResolutionDetailRestricted(String resolutionDetail) {
+        return "Action plan to resolve the complaint has been created".equals(resolutionDetail) ||
+            "The resolution plan is being implemented".equals(resolutionDetail) ||
+            "Customer has been informed about the resolution progress".equals(resolutionDetail) ||
+            "Waiting for customer confirmation on resolution".equals(resolutionDetail);
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+    @FXML
+    public void confirmReturnTicket(ActionEvent event) {
+        if (selectedResolution != null) {
+            int resolutionID = selectedResolution.getResolution_ID();
+            int complaintID = selectedResolution.getCompt_ID();
+            String complainantID = selectedResolution.getComplainant_ID();
+            String subject = selectedResolution.getCompt_Subject();
+            String description = selectedResolution.getCompt_Desc();
+            String orderID = selectedResolution.getCompt_OrderID();
+            String category = selectedResolution.getCompt_Category();
+            Date createdDate = selectedResolution.getComp_CreatedDate();
+            int deptID = selectedResolution.getDept_ID();
+            String status = "Pending";
+            
+            deleteResolution(resolutionID);
+            
+            insertReturnTicketComplaint(complaintID, complainantID, subject, description, orderID, category, createdDate, deptID, status);
+            
+            returnTicketPane.setVisible(false);
+            resolution_details.setVisible(false);
+            refreshTableView(); 
+        }
+    }
+
+    private void insertReturnTicketComplaint(int complaintID, String complainantID, String subject, String description, String orderID, String category, Date createdDate, int deptID, String status) {
+        String checkQuery = "SELECT compt_ID, compt_Status FROM complaint_ticket WHERE compt_ID = ?";
+        String deleteQuery = "DELETE FROM complaint_ticket WHERE compt_ID = ? AND compt_Status = 'Approved'";
+        String insertQuery = "INSERT INTO complaint_ticket (compt_ID, complainant_ID, admin_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_ProdInfo, compt_CustServRate, compt_Status, compt_CreatedDate, compt_Dept) " +
+                    "VALUES (?, ?, 1, ?, ?, ?, ?, 'Product Info', 0, ?, ?, ?)";
+
+        try (Connection connection = DbConnect.getConnect();
+            PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
+            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+            PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+
+            // Check if an entry with the same primary key exists
+            checkStatement.setInt(1, complaintID);
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String currentStatus = resultSet.getString("compt_Status");
+
+                // If the entry exists and has an "Approved" status, delete it
+                if ("Approved".equals(currentStatus)) {
+                    deleteStatement.setInt(1, complaintID);
+                    deleteStatement.executeUpdate();
+                }
+            }
+
+            // Insert the new entry with the "Pending" status
+            insertStatement.setInt(1, complaintID);
+            insertStatement.setString(2, complainantID);
+            insertStatement.setString(3, subject);
+            insertStatement.setString(4, description);
+            insertStatement.setString(5, orderID);
+            insertStatement.setString(6, category);
+            insertStatement.setString(7, status);
+            insertStatement.setDate(8, createdDate);
+            insertStatement.setInt(9, deptID);
+
+            int affectedRows = insertStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Complaint marked as Pending successfully.");
+            } else {
+                System.out.println("Failed to mark complaint as Pending.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void cancelReturnTicket(ActionEvent event) {
+        returnTicketPane.setVisible(false);
+    }
 
     @FXML
     public void gotoLogin(ActionEvent event) throws IOException {

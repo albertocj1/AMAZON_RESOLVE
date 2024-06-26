@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "Amazon_81807367"
+        },
+        {
+            "type": "java",
             "name": "addDept",
             "request": "launch",
             "mainClass": "Model.addDept",
