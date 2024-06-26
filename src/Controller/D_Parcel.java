@@ -20,7 +20,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class D_Parcel {
@@ -51,6 +53,9 @@ public class D_Parcel {
 
     private ObservableList<resolution> resolutionList;
 
+    @FXML
+    private TextField searchTextField;
+
     private Connection connection;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
@@ -80,6 +85,8 @@ public class D_Parcel {
 
         try {
             preparedStatement = connection.prepareStatement(query);
+
+            
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

@@ -300,52 +300,52 @@ public class A_Pend_App_Unres {
     }
 
     public void refreshApprovedTable() {
-        try {
-            ObservableList<complaint_ticket> approvedTicketList = FXCollections.observableArrayList();
-    
-            String searchKeyword = searchTextField.getText();
-    
-            StringBuilder queryBuilder = new StringBuilder("SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Approved'");
-    
-            if (!searchKeyword.isEmpty()) {
-                queryBuilder.append(" AND (compt_Subject LIKE ? OR compt_Desc LIKE ? OR compt_OrderID LIKE ?)");
-            }
-    
-            preparedStatement = connection.prepareStatement(queryBuilder.toString());
-    
-            if (!searchKeyword.isEmpty()) {
-                String keyword = "%" + searchKeyword + "%";
-                preparedStatement.setString(1, keyword);
-                preparedStatement.setString(2, keyword);
-                preparedStatement.setString(3, keyword);
-            }
-    
-            resultSet = preparedStatement.executeQuery();
-    
-            while (resultSet.next()) {
-                approvedTicketList.add(new complaint_ticket(
-                    resultSet.getInt("compt_ID"),
-                    resultSet.getInt("complainant_ID"),
-                    1, // admin_ID placeholder
-                    resultSet.getString("compt_Subject"),
-                    resultSet.getString("compt_Desc"),
-                    resultSet.getString("compt_OrderID"),
-                    resultSet.getString("compt_Category"),
-                    "", // compt_ProdInfo placeholder
-                    0, // compt_CustServRate placeholder
-                    "Approved", // compt_Status placeholder
-                    resultSet.getDate("compt_CreatedDate"),
-                    resultSet.getString("compt_Dept")
-                ));
-            }
-    
-            approveTable.setItems(approvedTicketList);
-    
-        } catch (SQLException e) {
-            e.printStackTrace();
+    try {
+        ObservableList<complaint_ticket> approvedTicketList = FXCollections.observableArrayList();
+
+        String searchKeyword = searchTextField.getText();
+
+        StringBuilder queryBuilder = new StringBuilder("SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Approved'");
+
+        if (!searchKeyword.isEmpty()) {
+            queryBuilder.append(" AND (compt_Subject LIKE ? OR compt_Desc LIKE ? OR compt_OrderID LIKE ?)");
         }
+
+        preparedStatement = connection.prepareStatement(queryBuilder.toString());
+
+        if (!searchKeyword.isEmpty()) {
+            String keyword = "%" + searchKeyword + "%";
+            preparedStatement.setString(1, keyword);
+            preparedStatement.setString(2, keyword);
+            preparedStatement.setString(3, keyword);
+        }
+
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            approvedTicketList.add(new complaint_ticket(
+                resultSet.getInt("compt_ID"),
+                resultSet.getInt("complainant_ID"),
+                1, // admin_ID placeholder
+                resultSet.getString("compt_Subject"),
+                resultSet.getString("compt_Desc"),
+                resultSet.getString("compt_OrderID"),
+                resultSet.getString("compt_Category"),
+                "", // compt_ProdInfo placeholder
+                0, // compt_CustServRate placeholder
+                "Approved", // compt_Status placeholder
+                resultSet.getDate("compt_CreatedDate"),
+                resultSet.getString("compt_Dept")
+            ));
+        }
+
+        approveTable.setItems(approvedTicketList);
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
-    
+}
+
     
    public void updateTicket(ActionEvent event) {
     String newComptID = updateComplaintID.getText();
