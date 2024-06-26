@@ -442,6 +442,7 @@ public class D_Order {
     @FXML
     public void confirmUnresolvable(ActionEvent event) {
         if (selectedResolution != null) {
+            int resolutionID = selectedResolution.getResolution_ID();
             int complaintID = selectedResolution.getCompt_ID();
             String complainantID = selectedResolution.getComplainant_ID();
             String subject = selectedResolution.getCompt_Subject();
@@ -452,12 +453,35 @@ public class D_Order {
             int deptID = selectedResolution.getDept_ID();
             String status = "Unresolvable";
             
+            deleteResolution(resolutionID);
+            
             insertUnresolvableComplaint(complaintID, complainantID, subject, description, orderID, category, createdDate, deptID, status);
             
             flagUnresolvable.setVisible(false);
-            refreshTableView(); // Assuming this method updates your table view
+            resolution_details.setVisible(false);
+            refreshTableView(); 
         }
     }
+
+    private void deleteResolution(int resolutionID) {
+        String deleteQuery = "DELETE FROM resolution WHERE resolution_ID = ?";
+    
+        try (Connection connection = DbConnect.getConnect();
+             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
+    
+            deleteStatement.setInt(1, resolutionID);
+            int affectedRows = deleteStatement.executeUpdate();
+    
+            if (affectedRows > 0) {
+                System.out.println("Resolution deleted successfully.");
+            } else {
+                System.out.println("Failed to delete resolution.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     @FXML
     public void cancelUnresolvable(ActionEvent event) {
@@ -468,7 +492,8 @@ public class D_Order {
         String checkQuery = "SELECT compt_ID, compt_Status FROM complaint_ticket WHERE compt_ID = ?";
         String deleteQuery = "DELETE FROM complaint_ticket WHERE compt_ID = ? AND compt_Status = 'Approved'";
         String insertQuery = "INSERT INTO complaint_ticket (compt_ID, complainant_ID, admin_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_ProdInfo, compt_CustServRate, compt_Status, compt_CreatedDate, compt_Dept) " +
-                             "VALUES (?, ?, 1, ?, ?, ?, ?, Product Info, 0, ?, ?, ?)";
+                     "VALUES (?, ?, 1, ?, ?, ?, ?, 'Product Info', 0, ?, ?, ?)";
+
     
         try (Connection connection = DbConnect.getConnect();
              PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
