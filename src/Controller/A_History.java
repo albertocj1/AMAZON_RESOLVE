@@ -12,6 +12,8 @@ import java.io.IOException;
 
 public class A_History {
 
+    
+
     @FXML
     public void gotoTicket(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Admin-Pending-Approved-Unresolved.fxml"));

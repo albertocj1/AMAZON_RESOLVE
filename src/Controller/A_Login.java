@@ -6,13 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -51,7 +47,7 @@ public class A_Login {
             stage.setScene(scene);
             stage.show();
 
-        } else if (username.equals("dept001") && password.equals("dept123!@#")) {
+        } else if (username.equals("dept001") && password.equals("order_dept123!@#")) {
 
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -60,37 +56,36 @@ public class A_Login {
             stage.setScene(scene);
             stage.show();
 
+        } else if (username.equals("dept002") && password.equals("parcel_dept123!@#")) {
+
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/View/Parcel_Dept.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        } else if (username.equals("dept003") && password.equals("product_dept123!@#")) {
+
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/View/Product_Dept.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        
+        } else if (username.equals("dept004") && password.equals("returns_dept123!@#")) {
+
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/View/Returns_Dept.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
         } else {
-           showErrorAlert("Invalid username or password. Please try again.");
+            errorText.setVisible(true);
         }
     }
-
-    @FXML
-    public void gotoAdmin(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Admin-Dashboard.fxml"));
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    public void gotoDept(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Order_Dept.fxml"));
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-    private void showErrorAlert(String message) {
-     Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-         alert.showAndWait();
-}
 }

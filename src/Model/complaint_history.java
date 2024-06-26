@@ -3,13 +3,13 @@ import java.sql.Date;
 
 public class complaint_history {
     int history_ID;
-    int compt_ID;
+    int resolution_ID;
     Date history_Date;
     String history_Status;
 
-    public complaint_history(int history_ID, int compt_ID, Date history_Date, String history_Status) {
+    public complaint_history(int history_ID, int resolution_ID, Date history_Date, String history_Status) {
         this.history_ID = history_ID;
-        this.compt_ID = compt_ID;
+        this.resolution_ID = resolution_ID;
         this.history_Date = history_Date;
         this.history_Status = history_Status;
     }
@@ -22,12 +22,12 @@ public class complaint_history {
         this.history_ID = history_ID;
     }
 
-    public int getCompt_ID() {
-        return compt_ID;
+    public int getResolution_ID() {
+        return resolution_ID;
     }
 
-    public void setCompt_ID(int compt_ID) {
-        this.compt_ID = compt_ID;
+    public void setResolution_ID(int resolution_ID) {
+        this.resolution_ID = resolution_ID;
     }
 
     public Date getHistory_Date() {
