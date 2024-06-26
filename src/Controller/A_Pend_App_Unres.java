@@ -434,12 +434,26 @@ public class A_Pend_App_Unres {
     }
 
     public void refreshPendingTable() {
-        connection = DbConnect.getConnect();
-        ObservableList<complaint_ticket> pendingTicketList = FXCollections.observableArrayList();
-    
         try {
-            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Pending'";
-            preparedStatement = connection.prepareStatement(query);
+            ObservableList<complaint_ticket> pendingTicketList = FXCollections.observableArrayList();
+    
+            String searchKeyword = searchTextField.getText();
+    
+            StringBuilder queryBuilder = new StringBuilder("SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Pending'");
+    
+            if (!searchKeyword.isEmpty()) {
+                queryBuilder.append(" AND (compt_Subject LIKE ? OR compt_Desc LIKE ? OR compt_OrderID LIKE ?)");
+            }
+    
+            preparedStatement = connection.prepareStatement(queryBuilder.toString());
+    
+            if (!searchKeyword.isEmpty()) {
+                String keyword = "%" + searchKeyword + "%";
+                preparedStatement.setString(1, keyword);
+                preparedStatement.setString(2, keyword);
+                preparedStatement.setString(3, keyword);
+            }
+    
             resultSet = preparedStatement.executeQuery();
     
             while (resultSet.next()) {
@@ -458,13 +472,23 @@ public class A_Pend_App_Unres {
                     resultSet.getString("compt_Dept")
                 ));
             }
-            
-            // Set items to the pendingTable
+    
             pendingTable.setItems(pendingTicketList);
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
+    
+    
+
+    @FXML
+    private void handleSearch(KeyEvent event) {
+    if (event.getCode() == KeyCode.ENTER) {
+        refreshPendingTable();
+    }
+}
     
 
     public void createComplainant(ActionEvent event) {
@@ -602,6 +626,49 @@ public void addComplaint(ActionEvent event) {
         }
     }
 
+    public void discardUpdate(ActionEvent event) {
+        updateFirstName.setText("");
+        updateMiddleName.setText("");
+        updateLastName.setText("");
+        updateContactNum.setText("");
+        updateEmailAdd.setText("");
+        updateHouseNum.setText("");
+        updateBrgy.setText("");
+        updateStreet.setText("");
+        updateCity.setText("");
+        updateOrderID.setText("");
+        updateCategory.setText("");
+        updateCreatedDate.setText("");
+        updateSubTitle.setText("");
+        updateComptID.setText("");
+        updateSubject.setValue(null);
+        updateDept.setValue(null);
+        updateDesc.setText("");
+        updateComplaintID.setText("");
+        gotoPendings();
+
+    }
+
+    public void goUpdateTicket(ActionEvent event){
+        try {
+            if (pendingTable.getSelectionModel().getSelectedItem() == null){
+                showAlert("No ticket selected", "Please select a ticket to update.");
+                return;
+            }
+            pendingpane.setVisible(false);
+            pending_preview.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
     
     private String convertDeptIDToName(String deptID) {
         String deptName = null;

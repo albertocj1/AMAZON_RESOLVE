@@ -127,7 +127,7 @@
                   <Font name="Arial Bold" size="13.0" />
                </font>
             </Text>
-            <Button layoutX="778.0" layoutY="187.0" mnemonicParsing="false" onAction="#gotoPendingPrev" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
+            <Button layoutX="778.0" layoutY="187.0" mnemonicParsing="false" onAction="#goUpdateTicket" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
          </children></Pane>
       <Pane fx:id="approvedpane" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;" visible="false">
          <children>
@@ -387,7 +387,7 @@
                      </font>
                   </Text>
                   <Button layoutX="770.0" layoutY="625.0" mnemonicParsing="false" onAction="#updateTicket" opacity="0.0" prefHeight="27.0" prefWidth="95.0" text="Button" />
-                  <Button layoutX="840.0" layoutY="27.0" mnemonicParsing="false" onAction="#gotoPending" opacity="0.0" prefHeight="25.0" prefWidth="35.0" text="Button" />
+                  <Button layoutX="840.0" layoutY="27.0" mnemonicParsing="false" onAction="#discardUpdate" opacity="0.0" prefHeight="25.0" prefWidth="35.0" text="Button" />
                   <Label fx:id="updateFirstName" layoutX="151.0" layoutY="164.0" text="First Name">
                      <font>
                         <Font name="Arial" size="15.0" />
