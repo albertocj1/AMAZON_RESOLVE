@@ -76,6 +76,18 @@ public class A_Pend_App_Unres {
     private DatePicker approveDate;
 
     @FXML
+    private ChoiceBox <String> pendingSubject;
+
+    @FXML
+    private ChoiceBox <String> pendingDept;
+
+    @FXML
+    private ChoiceBox <String> pendingCategory;
+
+    @FXML
+    private DatePicker pendingDate;
+
+    @FXML
     private TextField addOrderID, addDesc;
 
     @FXML
@@ -101,6 +113,9 @@ public class A_Pend_App_Unres {
 
     @FXML
     private TableColumn <complaint_ticket, Date> PcreatedDateColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, String> PdepartmentColumn;
 
     @FXML
     private TableView <complaint_ticket> approveTable;
@@ -148,6 +163,8 @@ public class A_Pend_App_Unres {
         loadAData();
         refreshApprovedTable();
         loadPData();
+        refreshPendingTable();
+
         addDate.setValue(LocalDate.now());
         addDate.setEditable(false);
         addSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues" ));
@@ -159,6 +176,11 @@ public class A_Pend_App_Unres {
         approveSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
         approveDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
         approveCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
+
+        // Initialize pending filters
+        pendingSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
+        pendingDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
+        pendingCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
     }
 
     public void loadAData() {
@@ -208,66 +230,55 @@ public class A_Pend_App_Unres {
         }
     }
     
+   
 
     @FXML
     public void loadPData() {
         connection = DbConnect.getConnect();
-        //refreshPTable();
-        PcomplaintIDColumn.setCellValueFactory(new PropertyValueFactory<>("complaint_ID"));
+        
+        PcomplaintIDColumn.setCellValueFactory(new PropertyValueFactory<>("compt_ID"));
         PcomplainantIDColumn.setCellValueFactory(new PropertyValueFactory<>("complainant_ID"));
-        PsubjectColumn.setCellValueFactory(new PropertyValueFactory<>("complaint_Subject"));
-        PdescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("complaint_Desc"));
-        PorderIDColumn.setCellValueFactory(new PropertyValueFactory<>("complaint_OrderID"));
-        PcategoryColumn.setCellValueFactory(new PropertyValueFactory<>("complaint_Category"));
-        PcreatedDateColumn.setCellValueFactory(new PropertyValueFactory<>("complaint_CreatedDate"));
-
+        PsubjectColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Subject"));
+        PdescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Desc"));
+        PorderIDColumn.setCellValueFactory(new PropertyValueFactory<>("compt_OrderID"));
+        PcategoryColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Category"));
+        PcreatedDateColumn.setCellValueFactory(new PropertyValueFactory<>("compt_CreatedDate"));
+        PdepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Dept"));
     }
 
-    public void refreshPTable() {
-        try { 
-            complaint_ticketList.clear();
-
-            if (searchTextField != null) {
-                String searchKeyword = searchTextField.getText();
-
-                String query = "SELECT * FROM complaint_ticket WHERE complaint_ID LIKE '%" + searchKeyword + "%' OR complainant_ID LIKE '%" + searchKeyword + "%' OR complaint_Subject LIKE '%" + searchKeyword + "%' OR complaint_Desc LIKE '%" + searchKeyword + "%' OR complaint_OrderID LIKE '%" + searchKeyword + "%' OR complaint_Category LIKE '%" + searchKeyword + "%' OR complaint_CreatedDate LIKE '%" + searchKeyword + "%'";
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, "%" + searchKeyword + "%");
-                resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    complaint_ticketList.add(new complaint_ticket(
-                        resultSet.getInt("complaint_ID"),
-                        resultSet.getInt("complainant_ID"),
-                        resultSet.getInt("admin_ID"),
-                        resultSet.getString("complaint_Subject"),
-                        resultSet.getString("complaint_Desc"),
-                        resultSet.getString("complaint_OrderID"),
-                        resultSet.getString("complaint_Category"),
-                        resultSet.getString("complaint_ProdInfo"),
-                        resultSet.getInt("complaint_CustServRate"),
-                        resultSet.getString("complaint_Status"),
-                        resultSet.getDate("complaint_CreatedDate"),
-                        resultSet.getString("complaint_Dept")
-                    ));
-                }
-                    pendingTable.setItems(complaint_ticketList);
-            } else {
-                System.out.println("searchTextField is null");
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+    public void refreshPendingTable() {
+        connection = DbConnect.getConnect();
+        ObservableList<complaint_ticket> pendingTicketList = FXCollections.observableArrayList();
+    
+        try {
+            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Pending'";
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+                pendingTicketList.add(new complaint_ticket(
+                    resultSet.getInt("compt_ID"),
+                    resultSet.getInt("complainant_ID"),
+                    1, // admin_ID placeholder
+                    resultSet.getString("compt_Subject"),
+                    resultSet.getString("compt_Desc"),
+                    resultSet.getString("compt_OrderID"),
+                    resultSet.getString("compt_Category"),
+                    "", // compt_ProdInfo placeholder
+                    0, // compt_CustServRate placeholder
+                    "Pending", // compt_Status placeholder
+                    resultSet.getDate("compt_CreatedDate"),
+                    resultSet.getString("compt_Dept")
+                ));
             }
             
-    }
-
-    @FXML
-    public void handleSearch(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            refreshPTable();
+            // Set items to the pendingTable
+            pendingTable.setItems(pendingTicketList);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+    
 
     public void createComplainant(ActionEvent event) {
         try (Connection connection = DbConnect.getConnect()) {
@@ -678,6 +689,105 @@ public void addComplaint(ActionEvent event) {
         }
     }
     
+    public void handleSearch(ActionEvent event) {
+    }
+
+    // PENDING TABLE FILTERS
+    @FXML
+    public void handlePendingSubjectSelection(ActionEvent event) {
+        filterPendingTable();
+    }
+
+    @FXML
+    public void handlePendingDeptSelection(ActionEvent event) {
+        filterPendingTable();
+    }
+
+    @FXML
+    public void handlePendingCategorySelection(ActionEvent event) {
+        filterPendingTable();
+    }
+
+    @FXML
+    public void handlePendingDateSelection(ActionEvent event) {
+        filterPendingTable();
+    }
+
+    public void filterPendingTable() {
+        connection = DbConnect.getConnect();
+        ObservableList<complaint_ticket> pendingTicketList = FXCollections.observableArrayList();
+
+        try {
+            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Pending'";
+
+            // Apply filters if selections are made
+            String subjectFilter = pendingSubject.getValue();
+            String deptFilter = pendingDept.getValue();
+            String categoryFilter = pendingCategory.getValue();
+            LocalDate dateFilter = pendingDate.getValue();
+
+            boolean hasFilter = false;
+
+            if (subjectFilter != null && !subjectFilter.isEmpty()) {
+                query += " AND compt_Subject = ?";
+                hasFilter = true;
+            }
+            if (deptFilter != null && !deptFilter.isEmpty()) {
+                deptFilter = getDeptID(deptFilter); // Convert department name to ID
+                query += " AND compt_Dept = ?";
+                hasFilter = true;
+            }
+            if (categoryFilter != null && !categoryFilter.isEmpty()) {
+                query += " AND compt_Category = ?";
+                hasFilter = true;
+            }
+            if (dateFilter != null) {
+                query += " AND compt_CreatedDate = ?";
+                hasFilter = true;
+            }
+
+            preparedStatement = connection.prepareStatement(query);
+
+            int paramIndex = 1;
+
+            if (subjectFilter != null && !subjectFilter.isEmpty()) {
+                preparedStatement.setString(paramIndex++, subjectFilter);
+            }
+            if (deptFilter != null && !deptFilter.isEmpty()) {
+                preparedStatement.setString(paramIndex++, deptFilter);
+            }
+            if (categoryFilter != null && !categoryFilter.isEmpty()) {
+                preparedStatement.setString(paramIndex++, categoryFilter);
+            }
+            if (dateFilter != null) {
+                preparedStatement.setDate(paramIndex++, java.sql.Date.valueOf(dateFilter));
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                pendingTicketList.add(new complaint_ticket(
+                    resultSet.getInt("compt_ID"),
+                    resultSet.getInt("complainant_ID"),
+                    1, // admin_ID placeholder
+                    resultSet.getString("compt_Subject"),
+                    resultSet.getString("compt_Desc"),
+                    resultSet.getString("compt_OrderID"),
+                    resultSet.getString("compt_Category"),
+                    "", // compt_ProdInfo placeholder
+                    0, // compt_CustServRate placeholder
+                    "Pending", // compt_Status placeholder
+                    resultSet.getDate("compt_CreatedDate"),
+                    resultSet.getString("compt_Dept")
+                ));
+            }
+
+            // Set items to the pendingTable
+            pendingTable.setItems(pendingTicketList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     //BUTTON FUNCTIONS
@@ -694,7 +804,7 @@ public void addComplaint(ActionEvent event) {
         unresolvedpane.setVisible(true);
         approvedpane.setVisible(false);
         confirmation_delete.setVisible(false);
-        unresolved_preview.setVisible(false);
+        // unresolved_preview.setVisible(false);
     }
 
     @FXML

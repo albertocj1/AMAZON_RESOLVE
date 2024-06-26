@@ -102,10 +102,10 @@
                   <Font name="Arial Bold" size="16.0" />
                </font>
             </Text>
-            <ChoiceBox layoutX="29.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox layoutX="188.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox layoutX="347.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <DatePicker layoutX="505.0" layoutY="193.0" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
+            <ChoiceBox fx:id="pendingSubject" layoutX="29.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="pendingDept" layoutX="188.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="pendingCategory" layoutX="347.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <DatePicker fx:id="pendingDate" layoutX="505.0" layoutY="193.0" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
             <TableView fx:id="pendingTable" layoutX="29.0" layoutY="232.0" prefHeight="477.0" prefWidth="844.0">
               <columns>
                   <TableColumn fx:id="PcomplaintIDColumn" prefWidth="89.0" text="Complaint ID" />
@@ -115,11 +115,19 @@
                 <TableColumn fx:id="PorderIDColumn" prefWidth="110.0" text="Order ID" />
                   <TableColumn fx:id="PcategoryColumn" prefWidth="108.0" text="Category" />
                   <TableColumn fx:id="PcreatedDateColumn" prefWidth="125.0" text="Created Date" />
+                  <TableColumn fx:id="PdepartmentColumn" prefWidth="125.0" text="Department" />
               </columns>
             </TableView>
             <Button layoutX="162.0" layoutY="103.0" mnemonicParsing="false" onAction="#gotoApproved" opacity="0.0" prefHeight="25.0" prefWidth="81.0" text="Button" />
             <Button layoutX="277.0" layoutY="102.0" mnemonicParsing="false" onAction="#gotoUnresolved" opacity="0.0" prefHeight="25.0" prefWidth="81.0" text="Button" />
-            <Button layoutX="797.0" layoutY="26.0" mnemonicParsing="false" onAction="#createComplainant" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
+            <Button layoutX="797.0" layoutY="29.0" mnemonicParsing="false" onAction="#createComplainant" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
+            <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#3c3934" height="33.0" layoutX="-204.0" layoutY="86.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="95.0" x="982.0" y="104.0" />
+            <Text fill="WHITE" layoutX="783.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Ticket">
+               <font>
+                  <Font name="Arial Bold" size="13.0" />
+               </font>
+            </Text>
+            <Button fx:id="updatePendingTicket" layoutX="778.0" layoutY="187.0" mnemonicParsing="false" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
          </children></Pane>
       <Pane fx:id="approvedpane" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;" visible="false">
          <children>
@@ -174,7 +182,7 @@
             <Button layoutX="274.0" layoutY="102.0" mnemonicParsing="false" onAction="#gotoUnresolved" opacity="0.0" prefHeight="25.0" prefWidth="87.0" text="Button" />
          </children>
       </Pane>
-      <Pane fx:id="unresolvedpane" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;">
+      <Pane fx:id="unresolvedpane" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;" visible="false">
          <children>
             <Text layoutX="-229.0" layoutY="-52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Complaint Tickets" x="258.0" y="109.0">
                <font>
@@ -362,7 +370,7 @@
                      </font>
                   </Label>
                   <ChoiceBox layoutX="674.0" layoutY="431.0" prefHeight="33.0" prefWidth="190.0" style="-fx-background-color: F5F4F2; -fx-background-radius: 10; -fx-border-color: F5F4F2; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-                  <Label layoutX="678.0" layoutY="407.0" text="Subject">
+                  <Label layoutX="678.0" layoutY="407.0" text="Product Category">
                      <font>
                         <Font name="Arial Bold" size="15.0" />
                      </font>
