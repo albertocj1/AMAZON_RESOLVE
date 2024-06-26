@@ -15,6 +15,8 @@ import Model.DbConnect;
 import Model.admin;
 import Model.complainant;
 import Model.complaint_ticket;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -147,10 +149,13 @@ public class A_Pend_App_Unres {
     private TableColumn <complaint_ticket, String> AdepartmentColumn;
 
     @FXML 
-    private Label updateFirstName, updateMiddleName, updateLastName, UpdateContactNumber, updateEmailAdd, updateHouseNum, updateBrgy, updateStreet, updateCity;
+    private Label updateFirstName, updateMiddleName, updateLastName, updateContactNum, updateEmailAdd, updateHouseNum, updateBrgy, updateStreet, updateCity;
 
     @FXML
     private Label updateOrderID, updateCategory, updateCreatedDate;
+
+    @FXML
+    private Label updateSubTitle, updateComptID;
 
     @FXML
     private ChoiceBox <String> updateDept, updateSubject;
@@ -187,6 +192,10 @@ public class A_Pend_App_Unres {
         addSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues" ));
         addDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
         addCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
+
+        updateSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues" ));
+        updateDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
+        
 
 
         // Initialize approve filters
@@ -227,7 +236,7 @@ public class A_Pend_App_Unres {
         updateFirstName.setText(selectedRow.getComplainant_FName());
         updateMiddleName.setText(selectedRow.getComplainant_MName());
         updateLastName.setText(selectedRow.getComplainant_LName());
-        UpdateContactNumber.setText(selectedRow.getComplainant_ContactNum());
+        updateContactNum.setText(selectedRow.getComplainant_ContactNum());
         updateEmailAdd.setText(selectedRow.getComplainant_EmailAdd());
         updateHouseNum.setText(selectedRow.getComplainant_HouseNum());
         updateBrgy.setText(selectedRow.getComplainant_Brgy());
@@ -237,6 +246,8 @@ public class A_Pend_App_Unres {
 
     private void bindSelectedTicketData(complaint_ticket selectedRow) {
         updateComplaintID.setText(String.valueOf(selectedRow.getCompt_ID()));
+        updateComptID.setText(String.valueOf(selectedRow.getComplainant_ID()));
+        updateSubTitle.setText(selectedRow.getCompt_Subject());
         updateSubject.setValue(selectedRow.getCompt_Subject());
         updateDesc.setText(selectedRow.getCompt_Desc());
         updateOrderID.setText(selectedRow.getCompt_OrderID());
@@ -321,7 +332,92 @@ public class A_Pend_App_Unres {
         }
     }
     
-   
+   public void updateTicket(ActionEvent event) {
+    String newComptID = updateComplaintID.getText();
+    String newComplainantID = updateComptID.getText();
+    String newSubject = updateSubject.getValue();
+    String newDept = updateDept.getValue();
+    String newDesc = updateDesc.getText();
+    String newOrderID = updateOrderID.getText();
+    String newCategory = updateCategory.getText();
+    String newDate = updateCreatedDate.getText();
+
+    // Convert Department names to IDs
+    switch (newDept) {
+        case "Order Fulfillment Department":
+            newDept = "1";
+            break;
+        case "Parcel Tracking Department":
+            newDept = "2";
+            break;
+        case "Product Replacement Department":
+            newDept = "3";
+            break;
+        case "Returns Management Department":
+            newDept = "4";
+            break;
+    }
+
+    try {
+        int complainantIDInt = Integer.parseInt(newComplainantID);
+        int comptIDInt = Integer.parseInt(newComptID);
+        int deptIDInt = Integer.parseInt(newDept);
+
+        String complaintTicketUpdateQuery = "UPDATE complaint_ticket SET complainant_ID = ?, admin_ID = ?, compt_Subject = ?, compt_Desc = ?, compt_OrderID = ?, compt_Category = ?, compt_ProdInfo = ?, compt_CustServRate = 0, compt_Status = 'Approved', compt_CreatedDate = ?, compt_Dept = ? WHERE compt_ID = ?";
+        try (PreparedStatement complaintTicketStatement = connection.prepareStatement(complaintTicketUpdateQuery)) {
+            complaintTicketStatement.setInt(1, complainantIDInt);
+            complaintTicketStatement.setInt(2, adminID);  // Ensure adminID is set appropriately
+            complaintTicketStatement.setString(3, newSubject);
+            complaintTicketStatement.setString(4, newDesc);
+            complaintTicketStatement.setString(5, newOrderID);
+            complaintTicketStatement.setString(6, newCategory);
+            complaintTicketStatement.setString(7, "Product Info");
+            complaintTicketStatement.setDate(8, java.sql.Date.valueOf(newDate));
+            complaintTicketStatement.setString(9, newDept);
+            complaintTicketStatement.setInt(10, comptIDInt);
+
+            complaintTicketStatement.executeUpdate();
+        }
+
+        String resolutionInsertQuery = "INSERT INTO resolution (compt_ID, complainant_ID, dept_ID, resolution_Details, resolution_Status, resolution_Date) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement resolutionStatement = connection.prepareStatement(resolutionInsertQuery)) {
+            resolutionStatement.setInt(1, comptIDInt);
+            resolutionStatement.setInt(2, complainantIDInt);
+            resolutionStatement.setInt(3, deptIDInt);
+            resolutionStatement.setString(4, "Complaint received and initial assessment started");
+            resolutionStatement.setString(5, "In Progress");
+            resolutionStatement.setDate(6, java.sql.Date.valueOf(newDate));
+
+            resolutionStatement.executeUpdate();
+        }
+
+        // Show success alert
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText("Ticket updated successfully!");
+        alert.showAndWait();
+        refreshPendingTable();
+        gotoPendings();
+
+    } catch (NumberFormatException e) {
+        // Show error alert for invalid number format
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Invalid Input");
+        alert.setContentText("Invalid number format: " + e.getMessage());
+        alert.showAndWait();
+    } catch (SQLException e) {
+        // Show error alert for SQL exception
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Database Error");
+        alert.setContentText("An error occurred while updating the ticket: " + e.getMessage());
+        alert.showAndWait();
+        e.printStackTrace();
+    }
+}
+
 
     @FXML
     public void loadPData() {
@@ -909,6 +1005,16 @@ public void addComplaint(ActionEvent event) {
         newTicket2.setVisible(false);
     }
 
+    public void gotoPendings() {
+        pendingpane.setVisible(true);
+        unresolvedpane.setVisible(false);
+        approvedpane.setVisible(false);
+        pending_preview.setVisible(false);
+        confirmation_approval.setVisible(false);
+        newTicket1.setVisible(false);
+        newTicket2.setVisible(false);
+    }
+
     @FXML
     public void gotoPendingPrev(ActionEvent event) throws IOException {
         pendingpane.setVisible(false);
@@ -930,6 +1036,14 @@ public void addComplaint(ActionEvent event) {
         pending_preview.setVisible(false);
         unresolvedpane.setVisible(false);
         confirmation_delete.setVisible(true);
+    }
+
+    @FXML
+    public void gotoUpdateTicket(ActionEvent event) throws IOException {
+        pendingpane.setVisible(false);
+        unresolvedpane.setVisible(false);
+        confirmation_delete.setVisible(false);
+        pending_preview.setVisible(true);
     }
     
     @FXML
@@ -974,5 +1088,8 @@ public void addComplaint(ActionEvent event) {
         stage.setScene(scene);
         stage.show();
     }
+
+    
+
 
 }
