@@ -125,7 +125,7 @@
             </Text>
             <Button layoutX="781.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleUpdateButton" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
          </children></Pane>
-      <Pane fx:id="resolution_details" layoutX="236.0" layoutY="83.0" prefHeight="695.0" prefWidth="871.0" visible="false">
+      <Pane fx:id="resolution_details" layoutX="236.0" layoutY="83.0" prefHeight="695.0" prefWidth="871.0">
          <children>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="702.0" stroke="#12b936" strokeType="INSIDE" strokeWidth="0.0" width="872.0" />
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f6" height="193.0" layoutX="24.0" layoutY="120.0" stroke="BLACK" strokeLineCap="BUTT" strokeType="OUTSIDE" strokeWidth="0.0" width="241.0" />
