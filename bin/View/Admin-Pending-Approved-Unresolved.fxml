@@ -23,7 +23,7 @@
             <Image url="@../Icons/Logo.png" />
          </image>
       </ImageView>
-      <TextField fx:id="searchTextField" layoutX="248.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleSearch" prefHeight="37.15" prefWidth="343.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
+      <TextField fx:id="searchTextField" layoutX="248.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleSearch" prefHeight="37.15" prefWidth="343.0" promptText="Search by Order ID...." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
       <Line endX="1023.0" layoutX="101.0" layoutY="69.0" startX="-100.0" stroke="#e5e5e5" strokeWidth="0.5" />
       <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#ff9900" height="35.0" layoutX="-12.0" layoutY="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="19.0" />
       <Rectangle arcHeight="17.0" arcWidth="17.0" fill="#ff990037" height="35.0" layoutX="22.0" layoutY="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="178.0" />
