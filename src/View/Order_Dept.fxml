@@ -32,7 +32,7 @@
             <Font name="Arial" size="16.0" />
          </font>
       </Text>
-      <TextField layoutX="246.0" layoutY="17.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.15" prefWidth="343.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
+      <TextField fx:id="searchTextField" layoutX="246.0" layoutY="17.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleSearch" prefHeight="37.15" prefWidth="343.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
       <ImageView layoutX="550.0" layoutY="17.0">
          <image>
             <Image url="@../Icons/searchrec.png" />

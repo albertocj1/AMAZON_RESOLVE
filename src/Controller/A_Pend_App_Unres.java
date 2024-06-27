@@ -13,10 +13,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import Model.DbConnect;
 import Model.admin;
+import Model.complainant;
 import Model.complaint_ticket;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -182,6 +186,23 @@ public class A_Pend_App_Unres {
 
     @FXML
     private TableColumn <complaint_ticket, String> UdepartmentColumn;
+    @FXML 
+    private Label updateFirstName, updateMiddleName, updateLastName, updateContactNum, updateEmailAdd, updateHouseNum, updateBrgy, updateStreet, updateCity;
+
+    @FXML
+    private Label updateOrderID, updateCategory, updateCreatedDate;
+
+    @FXML
+    private Label updateSubTitle, updateComptID;
+
+    @FXML
+    private ChoiceBox <String> updateDept, updateSubject;
+
+    @FXML
+    private TextField updateDesc;
+
+    @FXML
+    private Label updateComplaintID;
 
 
     @FXML
@@ -212,6 +233,10 @@ public class A_Pend_App_Unres {
         addDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
         addCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
 
+        updateSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues" ));
+        updateDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
+        
+
 
         // Initialize approve filters
         approveSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
@@ -227,8 +252,83 @@ public class A_Pend_App_Unres {
          unresolvableSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
          unresolvableDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
          unresolvableCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
+        pendingTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        pendingTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                printSelectedTicketData(newSelection);
+                bindSelectedTicketData(newSelection);
+    
+                // Fetch and bind complainant data
+                complainant comp = getComplainantData(newSelection.getComplainant_ID());
+                if (comp != null) {
+                    bindSelectedComptData(comp);
+                }
+            }
+        });
     }
 
+    public void printSelectedComptData(complainant selectedRow){
+        System.out.println("Selected row data: " + selectedRow.getComplainant_ID() + ", " + selectedRow.getComplainant_FName() + ", " + selectedRow.getComplainant_MName() + ", " + selectedRow.getComplainant_LName() + ", " + selectedRow.getComplainant_ContactNum() + ", " + selectedRow.getComplainant_EmailAdd() + ", " + selectedRow.getComplainant_HouseNum() + ", " + selectedRow.getComplainant_Brgy() + ", " + selectedRow.getComplainant_Street() + ", " + selectedRow.getComplainant_City());
+    }
+
+    public void printSelectedTicketData(complaint_ticket selectedRow) {
+        System.out.println("Selected row data: " + selectedRow.getCompt_ID() + ", " + selectedRow.getComplainant_ID() + ", " + selectedRow.getCompt_Subject() + ", " + selectedRow.getCompt_Desc() + ", " + selectedRow.getCompt_OrderID() + ", " + selectedRow.getCompt_Category() + ", " + selectedRow.getCompt_CreatedDate() + ", " + selectedRow.getCompt_Dept());
+    }
+    
+    public void bindSelectedComptData(complainant selectedRow){
+        updateFirstName.setText(selectedRow.getComplainant_FName());
+        updateMiddleName.setText(selectedRow.getComplainant_MName());
+        updateLastName.setText(selectedRow.getComplainant_LName());
+        updateContactNum.setText(selectedRow.getComplainant_ContactNum());
+        updateEmailAdd.setText(selectedRow.getComplainant_EmailAdd());
+        updateHouseNum.setText(selectedRow.getComplainant_HouseNum());
+        updateBrgy.setText(selectedRow.getComplainant_Brgy());
+        updateStreet.setText(selectedRow.getComplainant_Street());
+        updateCity.setText(selectedRow.getComplainant_City());
+    }
+
+    private void bindSelectedTicketData(complaint_ticket selectedRow) {
+        updateComplaintID.setText(String.valueOf(selectedRow.getCompt_ID()));
+        updateComptID.setText(String.valueOf(selectedRow.getComplainant_ID()));
+        updateSubTitle.setText(selectedRow.getCompt_Subject());
+        updateSubject.setValue(selectedRow.getCompt_Subject());
+        updateDesc.setText(selectedRow.getCompt_Desc());
+        updateOrderID.setText(selectedRow.getCompt_OrderID());
+        updateCategory.setText(selectedRow.getCompt_Category());
+        updateCreatedDate.setText(selectedRow.getCompt_CreatedDate().toString());
+        updateDept.setValue(selectedRow.getCompt_Dept());
+        
+    }
+
+    public complainant getComplainantData(int complainantID) {
+        complainant comp = null;
+        try {
+            query = "SELECT * FROM complainant WHERE complainant_ID = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, complainantID);
+            resultSet = preparedStatement.executeQuery();
+    
+            if (resultSet.next()) {
+                comp = new complainant(
+                    resultSet.getInt("complainant_ID"),
+                    resultSet.getString("complainant_FName"),
+                    resultSet.getString("complainant_MName"),
+                    resultSet.getString("complainant_LName"),
+                    resultSet.getString("complainant_ContactNum"),
+                    resultSet.getString("complainant_EmailAdd"),
+                    resultSet.getString("complainant_HouseNum"),
+                    resultSet.getString("complainant_Brgy"),
+                    resultSet.getString("complainant_Street"),
+                    resultSet.getString("complainant_City")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comp;
+    }
+    
     public void loadAData() {
         connection = DbConnect.getConnect();
 
@@ -244,37 +344,52 @@ public class A_Pend_App_Unres {
     }
 
     public void refreshApprovedTable() {
-        connection = DbConnect.getConnect();
+    try {
         ObservableList<complaint_ticket> approvedTicketList = FXCollections.observableArrayList();
-    
-        try {
-            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Approved'";
-            preparedStatement = connection.prepareStatement(query);
-            resultSet = preparedStatement.executeQuery();
-    
-            while (resultSet.next()) {
-                approvedTicketList.add(new complaint_ticket(
-                    resultSet.getInt("compt_ID"),
-                    resultSet.getInt("complainant_ID"),
-                    1, // admin_ID placeholder
-                    resultSet.getString("compt_Subject"),
-                    resultSet.getString("compt_Desc"),
-                    resultSet.getString("compt_OrderID"),
-                    resultSet.getString("compt_Category"),
-                    "", // compt_ProdInfo placeholder
-                    0, // compt_CustServRate placeholder
-                    "Approved", // compt_Status placeholder
-                    resultSet.getDate("compt_CreatedDate"),
-                    resultSet.getString("compt_Dept")
-                ));
-            }
-            
-            // Set items to the approveTable
-            approveTable.setItems(approvedTicketList);
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        String searchKeyword = searchTextField.getText();
+
+        StringBuilder queryBuilder = new StringBuilder("SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Approved'");
+
+        if (!searchKeyword.isEmpty()) {
+            queryBuilder.append(" AND (compt_Subject LIKE ? OR compt_Desc LIKE ? OR compt_OrderID LIKE ?)");
         }
+
+        preparedStatement = connection.prepareStatement(queryBuilder.toString());
+
+        if (!searchKeyword.isEmpty()) {
+            String keyword = "%" + searchKeyword + "%";
+            preparedStatement.setString(1, keyword);
+            preparedStatement.setString(2, keyword);
+            preparedStatement.setString(3, keyword);
+        }
+
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            approvedTicketList.add(new complaint_ticket(
+                resultSet.getInt("compt_ID"),
+                resultSet.getInt("complainant_ID"),
+                1, // admin_ID placeholder
+                resultSet.getString("compt_Subject"),
+                resultSet.getString("compt_Desc"),
+                resultSet.getString("compt_OrderID"),
+                resultSet.getString("compt_Category"),
+                "", // compt_ProdInfo placeholder
+                0, // compt_CustServRate placeholder
+                "Approved", // compt_Status placeholder
+                resultSet.getDate("compt_CreatedDate"),
+                resultSet.getString("compt_Dept")
+            ));
+        }
+
+        approveTable.setItems(approvedTicketList);
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+}
+
     
     public void loadUData() {
         connection = DbConnect.getConnect();
@@ -323,6 +438,92 @@ public class A_Pend_App_Unres {
         }
     }
    
+   public void updateTicket(ActionEvent event) {
+    String newComptID = updateComplaintID.getText();
+    String newComplainantID = updateComptID.getText();
+    String newSubject = updateSubject.getValue();
+    String newDept = updateDept.getValue();
+    String newDesc = updateDesc.getText();
+    String newOrderID = updateOrderID.getText();
+    String newCategory = updateCategory.getText();
+    String newDate = updateCreatedDate.getText();
+
+    // Convert Department names to IDs
+    switch (newDept) {
+        case "Order Fulfillment Department":
+            newDept = "1";
+            break;
+        case "Parcel Tracking Department":
+            newDept = "2";
+            break;
+        case "Product Replacement Department":
+            newDept = "3";
+            break;
+        case "Returns Management Department":
+            newDept = "4";
+            break;
+    }
+
+    try {
+        int complainantIDInt = Integer.parseInt(newComplainantID);
+        int comptIDInt = Integer.parseInt(newComptID);
+        int deptIDInt = Integer.parseInt(newDept);
+
+        String complaintTicketUpdateQuery = "UPDATE complaint_ticket SET complainant_ID = ?, admin_ID = ?, compt_Subject = ?, compt_Desc = ?, compt_OrderID = ?, compt_Category = ?, compt_ProdInfo = ?, compt_CustServRate = 0, compt_Status = 'Approved', compt_CreatedDate = ?, compt_Dept = ? WHERE compt_ID = ?";
+        try (PreparedStatement complaintTicketStatement = connection.prepareStatement(complaintTicketUpdateQuery)) {
+            complaintTicketStatement.setInt(1, complainantIDInt);
+            complaintTicketStatement.setInt(2, adminID);  // Ensure adminID is set appropriately
+            complaintTicketStatement.setString(3, newSubject);
+            complaintTicketStatement.setString(4, newDesc);
+            complaintTicketStatement.setString(5, newOrderID);
+            complaintTicketStatement.setString(6, newCategory);
+            complaintTicketStatement.setString(7, "Product Info");
+            complaintTicketStatement.setDate(8, java.sql.Date.valueOf(newDate));
+            complaintTicketStatement.setString(9, newDept);
+            complaintTicketStatement.setInt(10, comptIDInt);
+
+            complaintTicketStatement.executeUpdate();
+        }
+
+        String resolutionInsertQuery = "INSERT INTO resolution (compt_ID, complainant_ID, dept_ID, resolution_Details, resolution_Status, resolution_Date) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement resolutionStatement = connection.prepareStatement(resolutionInsertQuery)) {
+            resolutionStatement.setInt(1, comptIDInt);
+            resolutionStatement.setInt(2, complainantIDInt);
+            resolutionStatement.setInt(3, deptIDInt);
+            resolutionStatement.setString(4, "Complaint received and initial assessment started");
+            resolutionStatement.setString(5, "In Progress");
+            resolutionStatement.setDate(6, java.sql.Date.valueOf(newDate));
+
+            resolutionStatement.executeUpdate();
+        }
+
+        // Show success alert
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText("Ticket updated successfully!");
+        alert.showAndWait();
+        refreshPendingTable();
+        gotoPendings();
+
+    } catch (NumberFormatException e) {
+        // Show error alert for invalid number format
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Invalid Input");
+        alert.setContentText("Invalid number format: " + e.getMessage());
+        alert.showAndWait();
+    } catch (SQLException e) {
+        // Show error alert for SQL exception
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Database Error");
+        alert.setContentText("An error occurred while updating the ticket: " + e.getMessage());
+        alert.showAndWait();
+        e.printStackTrace();
+    }
+}
+
 
     @FXML
     public void loadPData() {
@@ -339,12 +540,26 @@ public class A_Pend_App_Unres {
     }
 
     public void refreshPendingTable() {
-        connection = DbConnect.getConnect();
-        ObservableList<complaint_ticket> pendingTicketList = FXCollections.observableArrayList();
-    
         try {
-            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Pending'";
-            preparedStatement = connection.prepareStatement(query);
+            ObservableList<complaint_ticket> pendingTicketList = FXCollections.observableArrayList();
+    
+            String searchKeyword = searchTextField.getText();
+    
+            StringBuilder queryBuilder = new StringBuilder("SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Pending'");
+    
+            if (!searchKeyword.isEmpty()) {
+                queryBuilder.append(" AND (compt_Subject LIKE ? OR compt_Desc LIKE ? OR compt_OrderID LIKE ?)");
+            }
+    
+            preparedStatement = connection.prepareStatement(queryBuilder.toString());
+    
+            if (!searchKeyword.isEmpty()) {
+                String keyword = "%" + searchKeyword + "%";
+                preparedStatement.setString(1, keyword);
+                preparedStatement.setString(2, keyword);
+                preparedStatement.setString(3, keyword);
+            }
+    
             resultSet = preparedStatement.executeQuery();
     
             while (resultSet.next()) {
@@ -363,13 +578,23 @@ public class A_Pend_App_Unres {
                     resultSet.getString("compt_Dept")
                 ));
             }
-            
-            // Set items to the pendingTable
+    
             pendingTable.setItems(pendingTicketList);
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
+    
+    
+
+    @FXML
+    private void handleSearch(KeyEvent event) {
+    if (event.getCode() == KeyCode.ENTER) {
+        refreshPendingTable();
+    }
+}
     
 
     public void createComplainant(ActionEvent event) {
@@ -507,6 +732,49 @@ public void addComplaint(ActionEvent event) {
         }
     }
 
+    public void discardUpdate(ActionEvent event) {
+        updateFirstName.setText("");
+        updateMiddleName.setText("");
+        updateLastName.setText("");
+        updateContactNum.setText("");
+        updateEmailAdd.setText("");
+        updateHouseNum.setText("");
+        updateBrgy.setText("");
+        updateStreet.setText("");
+        updateCity.setText("");
+        updateOrderID.setText("");
+        updateCategory.setText("");
+        updateCreatedDate.setText("");
+        updateSubTitle.setText("");
+        updateComptID.setText("");
+        updateSubject.setValue(null);
+        updateDept.setValue(null);
+        updateDesc.setText("");
+        updateComplaintID.setText("");
+        gotoPendings();
+
+    }
+
+    public void goUpdateTicket(ActionEvent event){
+        try {
+            if (pendingTable.getSelectionModel().getSelectedItem() == null){
+                showAlert("No ticket selected", "Please select a ticket to update.");
+                return;
+            }
+            pendingpane.setVisible(false);
+            pending_preview.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
     
     private String convertDeptIDToName(String deptID) {
         String deptName = null;
@@ -1045,6 +1313,16 @@ public void addComplaint(ActionEvent event) {
         newTicket2.setVisible(false);
     }
 
+    public void gotoPendings() {
+        pendingpane.setVisible(true);
+        unresolvedpane.setVisible(false);
+        approvedpane.setVisible(false);
+        pending_preview.setVisible(false);
+        confirmation_approval.setVisible(false);
+        newTicket1.setVisible(false);
+        newTicket2.setVisible(false);
+    }
+
     @FXML
     public void gotoPendingPrev(ActionEvent event) throws IOException {
         pendingpane.setVisible(false);
@@ -1066,6 +1344,14 @@ public void addComplaint(ActionEvent event) {
         pending_preview.setVisible(false);
         unresolvedpane.setVisible(false);
         confirmation_delete.setVisible(true);
+    }
+
+    @FXML
+    public void gotoUpdateTicket(ActionEvent event) throws IOException {
+        pendingpane.setVisible(false);
+        unresolvedpane.setVisible(false);
+        confirmation_delete.setVisible(false);
+        pending_preview.setVisible(true);
     }
     
     @FXML
@@ -1110,5 +1396,4 @@ public void addComplaint(ActionEvent event) {
         stage.setScene(scene);
         stage.show();
     }
-
 }

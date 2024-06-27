@@ -25,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -80,6 +81,9 @@ public class D_Parcel {
 
     private ObservableList<resolution> resolutionList;
 
+    @FXML
+    private TextField searchTextField;
+
     private Connection connection;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
@@ -121,6 +125,8 @@ public class D_Parcel {
     
         try {
             preparedStatement = connection.prepareStatement(query);
+
+            
             resultSet = preparedStatement.executeQuery();
     
             long inProgressCount = 0;
