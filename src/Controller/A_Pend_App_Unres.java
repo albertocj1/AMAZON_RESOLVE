@@ -593,6 +593,7 @@ public class A_Pend_App_Unres {
     private void handleSearch(KeyEvent event) {
     if (event.getCode() == KeyCode.ENTER) {
         refreshPendingTable();
+        refreshApprovedTable();
     }
 }
     
