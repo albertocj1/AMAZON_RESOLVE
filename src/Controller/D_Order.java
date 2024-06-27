@@ -80,8 +80,8 @@ public class D_Order {
 
     @FXML
     private Text allTickets, inProgressTickets, waitingTickets, totalResolvedTickets;
-    private TextField searchTextField;
-
+    
+   
     private ObservableList<resolution> resolutionList;
 
     private Connection connection;
@@ -126,14 +126,6 @@ public class D_Order {
     
         try {
             preparedStatement = connection.prepareStatement(query);
-
-            // Perform search by order ID if search field is not empty
-            String searchResolutionID = searchTextField.getText().trim();
-            if (!searchResolutionID.isEmpty()) {
-                query += " AND r.resolution_ID = ?";
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1, Integer.parseInt(searchResolutionID)); // Assuming resolution_ID is an integer
-            }
 
             resultSet = preparedStatement.executeQuery();
     

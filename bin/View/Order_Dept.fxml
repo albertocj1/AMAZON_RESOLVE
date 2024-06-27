@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -32,17 +31,6 @@
             <Font name="Arial" size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="searchTextField" layoutX="246.0" layoutY="17.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#handleSearch" prefHeight="37.15" prefWidth="343.0" promptText="Search..." style="-fx-background-color: #ffffff; -fx-border-color: #E5E5E5; -fx-border-radius: 10;" />
-      <ImageView layoutX="550.0" layoutY="17.0">
-         <image>
-            <Image url="@../Icons/searchrec.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="563.0" layoutY="28.0">
-         <image>
-            <Image url="@../Icons/search.png" />
-         </image>
-      </ImageView>
       <Pane fx:id="orderfulfillment" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;">
          <children>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="151.0" layoutX="18.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="871.0" />
