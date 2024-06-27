@@ -465,7 +465,7 @@
          </image>
       </ImageView>
       <Button layoutX="15.0" layoutY="766.0" mnemonicParsing="false" onAction="#gotoLogin" opacity="0.0" text="Button" />
-      <Pane fx:id="flagUnresolvable" layoutX="230.0" layoutY="81.0" prefHeight="731.0" prefWidth="906.0" visible="false">
+      <Pane fx:id="flagUnresolvable" layoutX="230.0" layoutY="81.0" prefHeight="731.0" prefWidth="906.0">
          <children>
             <Rectangle arcHeight="20.0" arcWidth="20.0" height="695.0" layoutX="14.0" layoutY="14.0" opacity="0.74" stroke="BLACK" strokeType="INSIDE" width="878.0" />
             <Rectangle arcHeight="34.0" arcWidth="34.0" fill="WHITE" height="384.0" layoutX="279.0" layoutY="172.0" stroke="BLACK" strokeType="INSIDE" width="345.0" />
@@ -475,24 +475,9 @@
                </image>
             </ImageView>
             <Circle fill="WHITE" layoutX="452.0" layoutY="246.0" radius="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-            <Text layoutX="319.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flag Ticket as Unresolvable?" textAlignment="CENTER" wrappingWidth="271.1523437500001">
+            <Text layoutX="319.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flag Ticket as Unresolvable?" textAlignment="CENTER" wrappingWidth="271.1523437500001">
                <font>
                   <Font name="Arial Bold" size="27.0" />
-               </font>
-            </Text>
-            <Text layoutX="321.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming, you acknowledge that all actions to">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-            </Text>
-            <Text layoutX="341.0" layoutY="427.0" strokeType="OUTSIDE" strokeWidth="0.0" text="address the complaint are complete. Once">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-            </Text>
-            <Text layoutX="368.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and the ticket will be closed.">
-               <font>
-                  <Font name="Arial" size="12.0" />
                </font>
             </Text>
             <Rectangle arcHeight="15.0" arcWidth="15.0" fill="WHITE" height="34.0" layoutX="299.0" layoutY="499.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
@@ -507,12 +492,12 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="327.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="confirmed, the resolution is marked as resolved,">
+            <Text layoutX="324.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Once confirmed, the resolution is marked as unresolvable and the ticket will be closed." textAlignment="CENTER" wrappingWidth="254.783203125">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="312.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This action is irreversible and cannot be undone.">
+            <Text layoutX="312.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This action is irreversible and cannot be undone.">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
