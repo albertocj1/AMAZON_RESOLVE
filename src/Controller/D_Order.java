@@ -25,7 +25,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -76,7 +79,10 @@ public class D_Order {
     private Text ATime, BTime, CTime, DTime, ETime, FTime;
 
     @FXML
-    private Text allTickets, inProgressTickets, waitingTickets, totalResolvedTickets;
+    private Text allTickets, inProgressTickets, waitingTickets, totalResolvedTickets;\
+
+    @FXML
+    private TextField searchTextField;
 
     private ObservableList<resolution> resolutionList;
 
@@ -107,6 +113,7 @@ public class D_Order {
         loadDataFromDatabase();
     }
 
+    @FXML
     private void loadDataFromDatabase() {
         connection = DbConnect.getConnect();
         String query = "SELECT r.*, c.complainant_FName, c.complainant_LName, comp.compt_Subject, comp.compt_Category, comp.compt_CreatedDate, comp.compt_Desc, comp.compt_OrderID, " +
@@ -121,6 +128,15 @@ public class D_Order {
     
         try {
             preparedStatement = connection.prepareStatement(query);
+
+            // Perform search by order ID if search field is not empty
+            String searchResolutionID = searchTextField.getText().trim();
+            if (!searchResolutionID.isEmpty()) {
+                query += " AND r.resolution_ID = ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, Integer.parseInt(searchResolutionID)); // Assuming resolution_ID is an integer
+            }
+
             resultSet = preparedStatement.executeQuery();
     
             long inProgressCount = 0;
@@ -185,6 +201,15 @@ public class D_Order {
             }
         }
     }
+
+    
+    @FXML
+private void handleSearch(KeyEvent event) {
+    if (event.getCode() == KeyCode.ENTER) {
+        refreshTableView();
+    }
+}
+
 
 
     @FXML
