@@ -75,6 +75,9 @@ public class D_Order {
     @FXML
     private Text ATime, BTime, CTime, DTime, ETime, FTime;
 
+    @FXML
+    private Text allTickets, inProgressTickets, waitingTickets, totalResolvedTickets;
+
     private ObservableList<resolution> resolutionList;
 
     private Connection connection;
@@ -106,16 +109,25 @@ public class D_Order {
 
     private void loadDataFromDatabase() {
         connection = DbConnect.getConnect();
-        String query = "SELECT r.*, c.complainant_FName, c.complainant_LName, comp.compt_Subject, comp.compt_Category, comp.compt_CreatedDate, comp.compt_Desc, comp.compt_OrderID " +
+        String query = "SELECT r.*, c.complainant_FName, c.complainant_LName, comp.compt_Subject, comp.compt_Category, comp.compt_CreatedDate, comp.compt_Desc, comp.compt_OrderID, " +
+                "(SELECT COUNT(*) FROM resolution WHERE resolution_Status = 'In Progress' AND dept_ID = 1) AS inProgressCount, " +
+                "(SELECT COUNT(*) FROM resolution WHERE resolution_Status = 'Waiting' AND dept_ID = 1) AS waitingCount, " +
+                "(SELECT COUNT(*) FROM resolution WHERE resolution_Status = 'Resolved' AND dept_ID = 1) AS resolvedCount, " +
+                "(SELECT COUNT(*) FROM resolution WHERE resolution_Status <> 'Resolved' AND dept_ID = 1) AS totalTickets " +
                 "FROM resolution r " +
                 "JOIN complainant c ON r.complainant_ID = c.complainant_ID " +
                 "JOIN complaint_ticket comp ON r.compt_ID = comp.compt_ID " +
                 "WHERE r.dept_ID = 1";
-
+    
         try {
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-
+    
+            long inProgressCount = 0;
+            long waitingCount = 0;
+            long resolvedCount = 0;
+            long totalTickets = 0;
+    
             while (resultSet.next()) {
                 int resolutionID = resultSet.getInt("resolution_ID");
                 int complaintID = resultSet.getInt("compt_ID");
@@ -132,7 +144,7 @@ public class D_Order {
                 Date createdDate = resultSet.getDate("compt_CreatedDate");
                 String comptDesc = resultSet.getString("compt_Desc");
                 String comptOrderID = resultSet.getString("compt_OrderID");
-
+    
                 resolution res = new resolution(resolutionID, complaintID, deptID, complainantID, description, status, date);
                 res.setComplainant_Name(complainantName);
                 res.setCompt_Subject(subject);
@@ -140,12 +152,27 @@ public class D_Order {
                 res.setComp_CreatedDate(createdDate);
                 res.setCompt_Desc(comptDesc);
                 res.setCompt_OrderID(comptOrderID);
-
+    
                 // Add to list only if status is not "Resolved"
                 if (!status.equals("Resolved")) {
                     resolutionList.add(res);
                 }
+    
+                // Get the counts from the first row (they will be the same for all rows)
+                if (inProgressCount == 0 && waitingCount == 0 && resolvedCount == 0 && totalTickets == 0) {
+                    inProgressCount = resultSet.getLong("inProgressCount");
+                    waitingCount = resultSet.getLong("waitingCount");
+                    resolvedCount = resultSet.getLong("resolvedCount");
+                    totalTickets = resultSet.getLong("totalTickets");
+                }
             }
+    
+            // Update the ticket counts
+            allTickets.setText(String.valueOf(totalTickets));
+            inProgressTickets.setText(String.valueOf(inProgressCount));
+            waitingTickets.setText(String.valueOf(waitingCount));
+            totalResolvedTickets.setText(String.valueOf(resolvedCount));
+    
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -158,7 +185,6 @@ public class D_Order {
             }
         }
     }
-
 
 
     @FXML

@@ -12,7 +12,7 @@ public class App extends Application {
     @FXML
     private MediaView mediaView;
 
-
+// 
     public static void main(String[] args) {
 
         launch(args);

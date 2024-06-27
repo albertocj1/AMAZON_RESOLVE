@@ -102,10 +102,10 @@
                   <Font name="Arial Bold" size="16.0" />
                </font>
             </Text>
-            <ChoiceBox fx:id="pendingSubject" layoutX="29.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox fx:id="pendingDept" layoutX="188.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox fx:id="pendingCategory" layoutX="347.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <DatePicker fx:id="pendingDate" layoutX="505.0" layoutY="193.0" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
+            <ChoiceBox fx:id="pendingSubject" layoutX="29.0" layoutY="193.0" onAction="#handlePendingSubjectSelection" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="pendingDept" layoutX="188.0" layoutY="193.0" onAction="#handlePendingDeptSelection" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="pendingCategory" layoutX="347.0" layoutY="193.0" onAction="#handlePendingCategorySelection" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <DatePicker fx:id="pendingDate" layoutX="505.0" layoutY="193.0" onAction="#handlePendingDateSelection" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
             <TableView fx:id="pendingTable" layoutX="29.0" layoutY="232.0" prefHeight="477.0" prefWidth="844.0">
               <columns>
                   <TableColumn fx:id="PcomplaintIDColumn" prefWidth="89.0" text="Complaint ID" />
@@ -216,18 +216,20 @@
                   <Font name="Arial Bold" size="16.0" />
                </font>
             </Text>
-            <ChoiceBox layoutX="29.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox layoutX="188.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <ChoiceBox layoutX="347.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
-            <DatePicker layoutX="505.0" layoutY="193.0" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
-            <TableView layoutX="29.0" layoutY="232.0" prefHeight="477.0" prefWidth="844.0">
+            <ChoiceBox fx:id="unresolvableSubject" layoutX="29.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="unresolvableDept" layoutX="188.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <ChoiceBox fx:id="unresolvableCategory" layoutX="347.0" layoutY="193.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 0.5;" />
+            <DatePicker fx:id="unresolvableDate" layoutX="505.0" layoutY="193.0" promptText="Created Date" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-width: 0.5; -fx-border-color: #000000; -fx-border-radius: 10;" />
+            <TableView fx:id="unresolvableTable" layoutX="29.0" layoutY="232.0" prefHeight="477.0" prefWidth="844.0">
                <columns>
-                  <TableColumn prefWidth="89.0" text="Complaint ID" />
-                  <TableColumn prefWidth="132.0" text="Complainant ID" />
-                  <TableColumn prefWidth="144.0" text="Subject" />
-                  <TableColumn prefWidth="170.0" text="Description" />
-                  <TableColumn prefWidth="138.0" text="Category" />
-                  <TableColumn prefWidth="170.0" text="Created Date" />
+                  <TableColumn fx:id="UcomplaintIDColumn" prefWidth="89.0" text="Complaint ID" />
+                  <TableColumn fx:id="UcomplainantIDColumn" prefWidth="101.0" text="Complainant ID" />
+                  <TableColumn fx:id="UsubjectColumn" prefWidth="129.0" text="Subject" />
+                  <TableColumn fx:id="UdescriptionColumn" prefWidth="130.0" text="Description" />
+                  <TableColumn fx:id="UorderIDColumn" prefWidth="111.0" text="Order ID" />
+                  <TableColumn fx:id="UcategoryColumn" prefWidth="94.0" text="Category" />
+                  <TableColumn fx:id="UcreatedDateColumn" prefWidth="104.0" text="Created Date" />
+                  <TableColumn fx:id="UdepartmentColumn" prefWidth="110.0" text="Department" />
                </columns>
             </TableView>
             <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="817.0" layoutY="105.0">
@@ -237,7 +239,7 @@
             </ImageView>
             <Button layoutX="50.0" layoutY="102.0" mnemonicParsing="false" onAction="#gotoPending" opacity="0.0" prefHeight="25.0" prefWidth="67.0" text="Button" />
             <Button layoutX="169.0" layoutY="102.0" mnemonicParsing="false" onAction="#gotoApproved" opacity="0.0" prefHeight="25.0" prefWidth="68.0" text="Button" />
-            <Button layoutX="800.0" layoutY="94.0" mnemonicParsing="false" onAction="#gotoDeleteConfirmation" opacity="0.0" prefHeight="38.0" prefWidth="93.0" text="Button" />
+            <Button layoutX="800.0" layoutY="94.0" mnemonicParsing="false" onAction="#handleDeleteUnresolvable" opacity="0.0" prefHeight="38.0" prefWidth="93.0" text="Button" />
          </children>
       </Pane>
       <Pane fx:id="pending_preview" layoutX="218.0" layoutY="69.0" prefHeight="732.0" prefWidth="906.0" style="-fx-background-color: #898989;" visible="false">
@@ -418,17 +420,12 @@
                   <Image url="@../Icons/trash-bin.png" />
                </image>
             </ImageView>
-            <Label layoutX="365.0" layoutY="331.0" text="#C00001">
-               <font>
-                  <Font name="Arial Bold" size="38.0" />
-               </font>
-            </Label>
-            <Text layoutX="290.0" layoutY="402.0" lineSpacing="0.1" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Ticket Deletion?" textAlignment="CENTER" wrappingWidth="316.70703125">
+            <Text layoutX="329.0" layoutY="369.0" lineSpacing="0.1" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Ticket Deletion?" textAlignment="CENTER" wrappingWidth="227.70703125">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
             </Text>
-            <Text layoutX="291.0" layoutY="429.0" lineSpacing="0.1" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming the deletion of this ticket, you acknowledge that all information and records associated with this ticket will be permanently removed from the system. This action is irreversible and cannot be undone. " textAlignment="CENTER" wrappingWidth="316.70703125">
+            <Text layoutX="316.0" layoutY="428.0" lineSpacing="0.1" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming the deletion of this ticket, this ticket will be permanently removed from the system. This action is irreversible and cannot be undone. " textAlignment="CENTER" wrappingWidth="260.44921875">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
@@ -445,14 +442,8 @@
                   <Font name="Arial Bold" size="13.0" />
                </font>
             </Label>
-            <ImageView layoutX="585.0" layoutY="207.0">
-               <image>
-                  <Image url="@../Icons/close%201.png" />
-               </image>
-            </ImageView>
-            <Button layoutX="579.0" layoutY="202.0" mnemonicParsing="false" onAction="#gotoUnresolved" opacity="0.0" prefHeight="25.0" prefWidth="26.0" text="Button" />
-            <Button layoutX="284.0" layoutY="512.0" mnemonicParsing="false" onAction="#gotoUnresolved" opacity="0.0" prefHeight="38.0" prefWidth="154.0" text="Button" />
-            <Button layoutX="450.0" layoutY="512.0" mnemonicParsing="false" onAction="#gotoUnresolved" opacity="0.0" prefHeight="38.0" prefWidth="155.0" text="Button" />
+            <Button layoutX="284.0" layoutY="512.0" mnemonicParsing="false" onAction="#cancelDeleteUnresolvable" opacity="0.0" prefHeight="38.0" prefWidth="154.0" text="Button" />
+            <Button layoutX="450.0" layoutY="512.0" mnemonicParsing="false" onAction="#confirmDeleteUnresolvable" opacity="0.0" prefHeight="38.0" prefWidth="155.0" text="Button" />
          </children>
       </Pane>
       <Pane fx:id="newTicket1" layoutX="218.0" layoutY="69.0" prefHeight="731.0" prefWidth="906.0" style="-fx-background-color: F5F4F2;" visible="false">

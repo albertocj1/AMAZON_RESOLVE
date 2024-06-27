@@ -28,12 +28,12 @@
                   <Font name="Arial Bold" size="24.0" />
                </font>
             </Text>
-            <TableView fx:id="amortizationTable" layoutX="31.0" layoutY="74.0" prefHeight="607.0" prefWidth="843.0">
+            <TableView fx:id="historyTable" layoutX="31.0" layoutY="74.0" prefHeight="607.0" prefWidth="843.0">
                <columns>
-                  <TableColumn fx:id="SDatecolumn" minWidth="5.599945068359375" prefWidth="204.2666778564453" text="History ID" />
-                  <TableColumn fx:id="PaymentColumn" minWidth="0.0" prefWidth="206.933349609375" text="Resolution ID" />
-                  <TableColumn fx:id="StatusColumn" prefWidth="226.66668701171875" text="Date" />
-                  <TableColumn fx:id="DDatecolumn" minWidth="0.0" prefWidth="204.2667236328125" text="Status" />
+                  <TableColumn fx:id="historyIDColumn" minWidth="5.599945068359375" prefWidth="152.0" text="History ID" />
+                  <TableColumn fx:id="resolutionIDColumn" minWidth="0.0" prefWidth="194.0" text="Resolution ID" />
+                  <TableColumn fx:id="historyDateColumn" prefWidth="249.0" text="Date" />
+                  <TableColumn fx:id="historyStatusColumn" minWidth="0.0" prefWidth="249.0" text="Status" />
                </columns>
             </TableView>
          </children></Pane>

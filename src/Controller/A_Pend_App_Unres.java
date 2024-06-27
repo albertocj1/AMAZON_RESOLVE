@@ -88,6 +88,18 @@ public class A_Pend_App_Unres {
     private DatePicker pendingDate;
 
     @FXML
+    private ChoiceBox <String> unresolvableSubject;
+
+    @FXML
+    private ChoiceBox <String> unresolvableDept;
+
+    @FXML
+    private ChoiceBox <String> unresolvableCategory;
+
+    @FXML
+    private DatePicker unresolvableDate;
+
+    @FXML
     private TextField addOrderID, addDesc;
 
     @FXML
@@ -144,6 +156,33 @@ public class A_Pend_App_Unres {
     @FXML
     private TableColumn <complaint_ticket, String> AdepartmentColumn;
 
+    @FXML
+    private TableView <complaint_ticket> unresolvableTable;
+
+    @FXML
+    private TableColumn <complaint_ticket, Integer>UcomplaintIDColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, Integer> UcomplainantIDColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, String> UsubjectColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, String> UdescriptionColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, Integer> UorderIDColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, String> UcategoryColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, Date> UcreatedDateColumn;
+
+    @FXML
+    private TableColumn <complaint_ticket, String> UdepartmentColumn;
+
 
     @FXML
     Pane pendingpane, approvedpane, unresolvedpane, pending_preview, unresolved_preview, confirmation_approval, confirmation_delete, newTicket1, newTicket2;
@@ -164,6 +203,8 @@ public class A_Pend_App_Unres {
         refreshApprovedTable();
         loadPData();
         refreshPendingTable();
+        loadUData();
+        refreshUnresolvableTable();
 
         addDate.setValue(LocalDate.now());
         addDate.setEditable(false);
@@ -181,6 +222,11 @@ public class A_Pend_App_Unres {
         pendingSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
         pendingDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
         pendingCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
+
+         // Initialize unresolved filters
+         unresolvableSubject.setItems(FXCollections.observableArrayList("Delayed Delivery", "Wrong Item Shipped", "Missing Package", "Tracking Information Inaccuracies", "Defective Product", "Incorrect Product Received", "Refund Request", "Return Shipping Issues"));
+         unresolvableDept.setItems(FXCollections.observableArrayList("Order Fulfillment Department", "Parcel Tracking Department", "Product Replacement Department", "Returns Management Department"));
+         unresolvableCategory.setItems(FXCollections.observableArrayList("Electronics", "Clothes", "Furniture", "Books"));
     }
 
     public void loadAData() {
@@ -230,6 +276,52 @@ public class A_Pend_App_Unres {
         }
     }
     
+    public void loadUData() {
+        connection = DbConnect.getConnect();
+
+        UcomplaintIDColumn.setCellValueFactory(new PropertyValueFactory<>("compt_ID"));
+        UcomplainantIDColumn.setCellValueFactory(new PropertyValueFactory<>("complainant_ID"));
+        UsubjectColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Subject"));
+        UdescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Desc"));
+        UorderIDColumn.setCellValueFactory(new PropertyValueFactory<>("compt_OrderID"));
+        UcategoryColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Category"));
+        UcreatedDateColumn.setCellValueFactory(new PropertyValueFactory<>("compt_CreatedDate"));
+        UdepartmentColumn.setCellValueFactory(new PropertyValueFactory<>("compt_Dept"));
+
+    }
+
+    public void refreshUnresolvableTable() {
+        connection = DbConnect.getConnect();
+        ObservableList<complaint_ticket> UnresolvableTicketList = FXCollections.observableArrayList();
+    
+        try {
+            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Unresolvable'";
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+                UnresolvableTicketList.add(new complaint_ticket(
+                    resultSet.getInt("compt_ID"),
+                    resultSet.getInt("complainant_ID"),
+                    1, // admin_ID placeholder
+                    resultSet.getString("compt_Subject"),
+                    resultSet.getString("compt_Desc"),
+                    resultSet.getString("compt_OrderID"),
+                    resultSet.getString("compt_Category"),
+                    "", // compt_ProdInfo placeholder
+                    0, // compt_CustServRate placeholder
+                    "Unresolvable", // compt_Status placeholder
+                    resultSet.getDate("compt_CreatedDate"),
+                    resultSet.getString("compt_Dept")
+                ));
+            }
+            
+            // Set items to the UnresolvableTable
+            unresolvableTable.setItems(UnresolvableTicketList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
    
 
     @FXML
@@ -789,6 +881,141 @@ public void addComplaint(ActionEvent event) {
         }
     }
 
+    @FXML
+    public void handleUnresolvableSubjectSelection(ActionEvent event) {
+        filterUnresolvedTable();
+    }
+
+    @FXML
+    public void handleUnresolvableDeptSelection(ActionEvent event) {
+        filterUnresolvedTable();
+    }
+
+    @FXML
+    public void handleUnresolvableCategorySelection(ActionEvent event) {
+        filterUnresolvedTable();
+    }
+
+    @FXML
+    public void handleUnresolvableDateSelection(ActionEvent event) {
+        filterUnresolvedTable();
+    }
+
+    public void filterUnresolvedTable() {
+        connection = DbConnect.getConnect();
+        ObservableList<complaint_ticket> UnresolvableTicketList = FXCollections.observableArrayList();
+    
+        try {
+            String query = "SELECT compt_ID, complainant_ID, compt_Subject, compt_Desc, compt_OrderID, compt_Category, compt_CreatedDate, compt_Dept FROM complaint_ticket WHERE compt_Status = 'Unresolvable'";
+    
+            // Apply filters if selections are made
+            String subjectFilter = unresolvableSubject.getValue();
+            String deptFilter = unresolvableDept.getValue();
+            String categoryFilter = unresolvableCategory.getValue();
+            LocalDate dateFilter = unresolvableDate.getValue();
+    
+            boolean hasFilter = false;
+    
+            if (subjectFilter != null && !subjectFilter.isEmpty()) {
+                query += " AND compt_Subject = ?";
+                hasFilter = true;
+            }
+            if (deptFilter != null && !deptFilter.isEmpty()) {
+                deptFilter = getDeptID(deptFilter); // Convert department name to ID
+                query += " AND compt_Dept = ?";
+                hasFilter = true;
+            }
+            if (categoryFilter != null && !categoryFilter.isEmpty()) {
+                query += " AND compt_Category = ?";
+                hasFilter = true;
+            }
+            if (dateFilter != null) {
+                query += " AND compt_CreatedDate = ?";
+                hasFilter = true;
+            }
+    
+            preparedStatement = connection.prepareStatement(query);
+    
+            int paramIndex = 1;
+    
+            if (subjectFilter != null && !subjectFilter.isEmpty()) {
+                preparedStatement.setString(paramIndex++, subjectFilter);
+            }
+            if (deptFilter != null && !deptFilter.isEmpty()) {
+                preparedStatement.setString(paramIndex++, deptFilter);
+            }
+            if (categoryFilter != null && !categoryFilter.isEmpty()) {
+                preparedStatement.setString(paramIndex++, categoryFilter);
+            }
+            if (dateFilter != null) {
+                preparedStatement.setDate(paramIndex++, java.sql.Date.valueOf(dateFilter));
+            }
+    
+            resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+                UnresolvableTicketList.add(new complaint_ticket(
+                    resultSet.getInt("compt_ID"),
+                    resultSet.getInt("complainant_ID"),
+                    1, // admin_ID placeholder
+                    resultSet.getString("compt_Subject"),
+                    resultSet.getString("compt_Desc"),
+                    resultSet.getString("compt_OrderID"),
+                    resultSet.getString("compt_Category"),
+                    "", // compt_ProdInfo placeholder
+                    0, // compt_CustServRate placeholder
+                    "Unresolvable", // compt_Status placeholder
+                    resultSet.getDate("compt_CreatedDate"),
+                    resultSet.getString("compt_Dept")
+                ));
+            }
+    
+            // Set items to the unresolvedTable
+            unresolvableTable.setItems(UnresolvableTicketList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //DELETE UNRESOLVABLE
+    @FXML
+    public void confirmDeleteUnresolvable(ActionEvent event) {
+    
+        complaint_ticket selectedTicket = unresolvableTable.getSelectionModel().getSelectedItem();
+
+        if (selectedTicket != null) {
+            connection = DbConnect.getConnect();
+
+            try {
+                String query = "DELETE FROM complaint_ticket WHERE compt_ID = ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, selectedTicket.getCompt_ID());
+                preparedStatement.executeUpdate();
+
+                // Remove the selected item from the table
+                unresolvableTable.getItems().remove(selectedTicket);
+
+                // Hide confirmation pane
+                confirmation_delete.setVisible(false);
+                refreshUnresolvableTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void cancelDeleteUnresolvable(ActionEvent event) {
+        confirmation_delete.setVisible(false);
+    }
+
+    @FXML
+    public void handleDeleteUnresolvable(ActionEvent event) {
+            if (unresolvableTable.getItems().isEmpty()) {
+                return;
+            }
+            confirmation_delete.setVisible(true);
+        }
 
     //BUTTON FUNCTIONS
     @FXML

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -50,7 +51,7 @@
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Text>
-            <TableView fx:id="productDepartmentTable" layoutX="18.0" layoutY="183.0" prefHeight="526.0" prefWidth="871.0">
+            <TableView fx:id="orderDepartmentTable" layoutX="18.0" layoutY="183.0" prefHeight="526.0" prefWidth="871.0">
               <columns>
                 <TableColumn fx:id="resolutionIDColumn" prefWidth="88.0" text="Resolution ID" />
                 <TableColumn fx:id="complaintIDColumn" prefWidth="85.0" text="Complaint ID" />
@@ -66,9 +67,9 @@
                   <Image url="@../Icons/boxrec.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="41.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="40.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../src/Icons/product.png" />
+                  <Image url="@../Icons/exchange.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="87.0" fitWidth="847.0" layoutX="31.0" layoutY="68.0">
@@ -91,31 +92,38 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="624.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TOTAL RESOLVED TICKETS TODAY">
+            <Text layoutX="624.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TOTAL RESOLVED TICKETS">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="80.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <Text fx:id="allTickets" layoutX="80.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
                   <Font name="Arial Bold" size="48.0" />
                </font>
             </Text>
-            <Text layoutX="226.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <Text fx:id="inProgressTickets" layoutX="226.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
                   <Font name="Arial Bold" size="48.0" />
                </font>
             </Text>
-            <Text layoutX="400.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <Text fx:id="waitingTickets" layoutX="400.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
                   <Font name="Arial Bold" size="48.0" />
                </font>
             </Text>
-            <Text layoutX="624.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <Text fx:id="totalResolvedTickets" layoutX="624.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
                   <Font name="Arial Bold" size="48.0" />
                </font>
             </Text>
+            <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#ff9900" height="33.0" layoutX="-201.0" layoutY="-76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="95.0" x="982.0" y="104.0" />
+            <Text fill="WHITE" layoutX="792.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Ticket">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Button layoutX="781.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleUpdateButton" opacity="0.0" prefHeight="38.0" prefWidth="95.0" text="Button" />
          </children></Pane>
       <Pane fx:id="resolution_details" layoutX="236.0" layoutY="83.0" prefHeight="695.0" prefWidth="871.0" visible="false">
          <children>
@@ -123,7 +131,7 @@
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f6" height="193.0" layoutX="24.0" layoutY="120.0" stroke="BLACK" strokeLineCap="BUTT" strokeType="OUTSIDE" strokeWidth="0.0" width="241.0" />
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f6" height="156.0" layoutX="26.0" layoutY="339.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="237.0" />
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f6f6f6" height="156.0" layoutX="26.0" layoutY="510.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="237.0" />
-            <Text layoutX="78.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#R00001">
+            <Text fx:id="resolutionNum" layoutX="78.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Resolution#">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
@@ -145,11 +153,6 @@
                   <Font name="Arial" size="18.0" />
                </font>
             </Text>
-            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#d9ffdd" height="27.0" layoutX="192.0" layoutY="16.0" stroke="#00c714" strokeType="INSIDE" width="131.0" />
-            <Text fill="#00c714" layoutX="226.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Progress">
-               <font>
-                  <Font name="Arial Bold" size="12.0" />
-               </font></Text>
             <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="45.0" layoutY="137.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Icons/Ticket.png" />
@@ -249,23 +252,23 @@
                </font>
             </Text>
             <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ececec" height="22.0" layoutX="124.0" layoutY="181.0" stroke="#a7a7a7" strokeType="INSIDE" width="97.0" />
-            <Text layoutX="389.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="9 June 2024 - 09:00:00" />
-            <Text layoutX="138.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#C00001">
+            <Text fx:id="ticketDateDetails" layoutX="389.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="9 June 2024 - 09:00:00" />
+            <Text fx:id="ticketNum" layoutX="138.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#C00001">
                <font>
                   <Font name="Arial" size="16.0" />
                </font>
             </Text>
-            <Text fill="#7e7e7e" layoutX="126.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Missing Item">
+            <Label fx:id="ticketSubject" layoutX="124.0" layoutY="212.0" prefHeight="17.0" prefWidth="95.0" text="Label" textFill="#7e7e7e">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+            </Label>
+            <Text fx:id="ticketCategory" fill="#7e7e7e" layoutX="126.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Electronics">
                <font>
                   <Font name="Arial" size="16.0" />
                </font>
             </Text>
-            <Text fill="#7e7e7e" layoutX="126.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Electronics">
-               <font>
-                  <Font name="Arial" size="16.0" />
-               </font>
-            </Text>
-            <Text fill="#7e7e7e" layoutX="155.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="06-06-2024">
+            <Text fx:id="ticketDate" fill="#7e7e7e" layoutX="155.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" text="06-06-2024">
                <font>
                   <Font name="Arial" size="16.0" />
                </font>
@@ -275,13 +278,90 @@
                   <Image url="@../Icons/close.png" />
                </image>
             </ImageView>
+            <Circle fx:id="ACircle" fill="#00c714" layoutX="354.0" layoutY="254.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+            <Circle fx:id="BCircle" fill="#00c714" layoutX="354.0" layoutY="333.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+            <Circle fx:id="CCircle" fill="#00c714" layoutX="354.0" layoutY="416.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+            <Circle fx:id="DCircle" fill="#00c714" layoutX="353.0" layoutY="498.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+            <Circle fx:id="ECircle" fill="#00c714" layoutX="354.0" layoutY="579.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+            <Circle fx:id="FCircle" fill="#00c714" layoutX="354.0" layoutY="661.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
             <Button layoutX="832.0" layoutY="17.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
-            <Button layoutX="341.0" layoutY="241.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
-            <Button layoutX="341.0" layoutY="649.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
-            <Button layoutX="341.0" layoutY="321.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
-            <Button layoutX="341.0" layoutY="404.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
-            <Button layoutX="340.0" layoutY="486.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
-            <Button layoutX="341.0" layoutY="567.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Text fill="#7e7e7e" layoutX="70.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flagging means the issue cannot be resolved through the standard procedures. This action is irreversible" wrappingWidth="177.6708984375">
+               <font>
+                  <Font name="Arial" size="10.0" />
+               </font>
+            </Text>
+            <ImageView layoutX="54.0" layoutY="405.0">
+               <image>
+                  <Image url="@../Icons/Question.png" />
+               </image>
+            </ImageView>
+            <Circle fill="#232f3e" layoutX="234.0" layoutY="469.0" radius="15.0" stroke="#232f3e" strokeType="INSIDE" strokeWidth="0.0" />
+            <ImageView layoutX="226.0" layoutY="461.0">
+               <image>
+                  <Image url="@../Icons/next%201.png" />
+               </image>
+            </ImageView>
+            <Circle fill="#232f3e" layoutX="235.0" layoutY="638.0" radius="15.0" stroke="#232f3e" strokeType="INSIDE" strokeWidth="0.0" />
+            <ImageView layoutX="227.0" layoutY="630.0">
+               <image>
+                  <Image url="@../Icons/next%201.png" />
+               </image>
+            </ImageView>
+            <Text fill="#7e7e7e" layoutX="69.0" layoutY="582.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Returning means the ticket has been mislabeled or assigned to the wrong department. " wrappingWidth="177.6708984375">
+               <font>
+                  <Font name="Arial" size="10.0" />
+               </font>
+            </Text>
+            <ImageView layoutX="53.0" layoutY="574.0">
+               <image>
+                  <Image url="@../Icons/Question.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="ATime" layoutX="387.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Button fx:id="AUpdate" layoutX="341.0" layoutY="241.0" mnemonicParsing="false" onAction="#handleAUpdate" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Button fx:id="FUpdate" layoutX="341.0" layoutY="649.0" mnemonicParsing="false" onAction="#handleFUpdate" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Button fx:id="BUpdate" layoutX="341.0" layoutY="321.0" mnemonicParsing="false" onAction="#handleBUpdate" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Button fx:id="CUpdate" layoutX="341.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleCUpdate" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Button fx:id="DUpdate" layoutX="340.0" layoutY="486.0" mnemonicParsing="false" onAction="#handleDUpdate" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Button fx:id="EUpdate" layoutX="341.0" layoutY="567.0" mnemonicParsing="false" onAction="#handleEUpdate" opacity="0.0" prefHeight="25.0" prefWidth="27.0" text="Button" />
+            <Text fx:id="BTime" layoutX="387.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="CTime" layoutX="388.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="DTime" layoutX="387.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="ETime" layoutX="388.0" layoutY="599.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="FTime" layoutX="387.0" layoutY="680.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Pane fx:id="WaitingPane" layoutX="255.0" layoutY="8.0" prefHeight="42.0" prefWidth="137.0" visible="false">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffedc6" height="27.0" layoutX="3.0" layoutY="9.0" stroke="#c78900" strokeType="INSIDE" width="131.0" />
+                  <Text fill="#c78900" layoutX="46.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting" wrappingWidth="59.99999999999977">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane fx:id="inProgressPane" layoutX="255.0" layoutY="8.0" prefHeight="42.0" prefWidth="137.0">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#d9ffdd" height="27.0" layoutX="3.0" layoutY="9.0" stroke="#00c714" strokeType="INSIDE" width="131.0" />
+                  <Text fill="#00c714" layoutX="38.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Progress">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane fx:id="ResolvedPane" layoutX="255.0" layoutY="8.0" prefHeight="42.0" prefWidth="137.0" visible="false">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#f5f5f5" height="27.0" layoutX="3.0" layoutY="9.0" stroke="#4d4b45" strokeType="INSIDE" width="131.0" />
+                  <Text fill="#4d4b45" layoutX="43.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Resolved" wrappingWidth="59.99999999999977">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Button fx:id="exit" layoutX="819.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleExitDetails" opacity="0.0" prefHeight="25.0" prefWidth="35.0" text="Button" />
+            <Button fx:id="unresolvable" layoutX="217.0" layoutY="454.0" mnemonicParsing="false" onAction="#handleUnresolvableButton" prefHeight="33.0" prefWidth="35.0" text="Button" />
+            <Button fx:id="returnTicket" layoutX="219.0" layoutY="623.0" mnemonicParsing="false" onAction="#handleReturnTicketButton" prefHeight="33.0" prefWidth="35.0" text="Button" />
          </children>
       </Pane>
       <Pane fx:id="resolution_update" layoutX="219.0" layoutY="70.0" prefHeight="731.0" prefWidth="906.0" visible="false">
@@ -298,34 +378,19 @@
             <Circle fill="WHITE" layoutX="540.0" layoutY="247.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
             <Line endX="5.0" layoutX="431.0" layoutY="247.0" startX="-51.0" stroke="#d9d9d9" />
             <Line endX="0.4000244140625" layoutX="522.0" layoutY="247.0" startX="-51.0" stroke="#d9d9d9" />
-            <Text layoutX="380.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#R00001">
+            <Text layoutX="334.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Update to">
                <font>
-                  <Font name="Arial Bold" size="36.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Text>
-            <Text layoutX="361.0" layoutY="401.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Update to">
+            <Text layoutX="323.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Resolution Process?">
                <font>
-                  <Font name="Arial Bold" size="21.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Text>
-            <Text layoutX="350.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Resolution Process?">
+            <Text layoutX="331.0" layoutY="431.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Would you like to confirm the update to the resolution process? Please note that any changes made will be irreversible." textAlignment="CENTER" wrappingWidth="244.20703125">
                <font>
-                  <Font name="Arial Bold" size="21.0" />
-               </font>
-            </Text>
-            <Text layoutX="332.0" layoutY="450.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming, you will assign this ticket to the">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-            </Text>
-            <Text layoutX="325.0" layoutY="462.0" strokeType="OUTSIDE" strokeWidth="0.0" text="department and you won't be able to access this">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-            </Text>
-            <Text layoutX="414.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ticket anymore.">
-               <font>
-                  <Font name="Arial" size="12.0" />
+                  <Font name="Arial" size="13.0" />
                </font>
             </Text>
             <Rectangle arcHeight="15.0" arcWidth="15.0" fill="WHITE" height="34.0" layoutX="299.0" layoutY="499.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
@@ -336,19 +401,13 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Text>
-            <ImageView fitHeight="13.0" fitWidth="16.0" layoutX="598.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Icons/close.png" />
-               </image>
-            </ImageView>
             <ImageView fitHeight="18.0" fitWidth="27.0" layoutX="353.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Icons/tick.png" />
                </image>
             </ImageView>
-            <Button layoutX="584.0" layoutY="184.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="30.0" text="Button" />
-            <Button layoutX="299.0" layoutY="503.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="149.0" text="Button" />
-            <Button layoutX="462.0" layoutY="503.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="149.0" text="Button" />
+            <Button fx:id="cancelUpdate" layoutX="299.0" layoutY="503.0" mnemonicParsing="false" onAction="#handleCancelUpdate" opacity="0.0" prefHeight="25.0" prefWidth="149.0" text="Button" />
+            <Button fx:id="confirmUpdate" layoutX="462.0" layoutY="503.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="149.0" text="Button" />
          </children>
       </Pane>
       <Pane fx:id="resolution_approval" layoutX="220.0" layoutY="71.0" prefHeight="731.0" prefWidth="906.0" visible="false">
@@ -361,27 +420,22 @@
                </image>
             </ImageView>
             <Circle fill="WHITE" layoutX="452.0" layoutY="246.0" radius="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-            <Text layoutX="380.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" text="#R00001">
+            <Text layoutX="319.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Resolution Approval?" textAlignment="CENTER" wrappingWidth="271.1523437500001">
                <font>
-                  <Font name="Arial Bold" size="36.0" />
+                  <Font name="Arial Bold" size="27.0" />
                </font>
             </Text>
-            <Text layoutX="310.0" layoutY="402.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Resolution Approval?">
-               <font>
-                  <Font name="Arial Bold" size="21.0" />
-               </font>
-            </Text>
-            <Text layoutX="329.0" layoutY="419.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming, you acknowledge that all actions to">
+            <Text layoutX="321.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming, you acknowledge that all actions to">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="349.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="address the complaint are complete. Once">
+            <Text layoutX="341.0" layoutY="427.0" strokeType="OUTSIDE" strokeWidth="0.0" text="address the complaint are complete. Once">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="376.0" layoutY="464.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and the ticket will be closed.">
+            <Text layoutX="368.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and the ticket will be closed.">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
@@ -398,17 +452,12 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Text>
-            <ImageView fitHeight="13.0" fitWidth="16.0" layoutX="598.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Icons/close.png" />
-               </image>
-            </ImageView>
-            <Text layoutX="335.0" layoutY="449.0" strokeType="OUTSIDE" strokeWidth="0.0" text="confirmed, the resolution is marked as resolved,">
+            <Text layoutX="327.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="confirmed, the resolution is marked as resolved,">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="320.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This action is irreversible and cannot be undone.">
+            <Text layoutX="312.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This action is irreversible and cannot be undone.">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -418,9 +467,8 @@
                   <Image url="@../Icons/tick%201.png" />
                </image>
             </ImageView>
-            <Button layoutX="586.0" layoutY="184.0" mnemonicParsing="false" opacity="0.0" prefHeight="25.0" prefWidth="30.0" text="Button" />
-            <Button layoutX="463.0" layoutY="497.0" mnemonicParsing="false" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
-            <Button layoutX="298.0" layoutY="498.0" mnemonicParsing="false" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
+            <Button fx:id="confirmUpdate1" layoutX="463.0" layoutY="497.0" mnemonicParsing="false" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
+            <Button fx:id="cancelUpdate1" layoutX="298.0" layoutY="498.0" mnemonicParsing="false" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
          </children>
       </Pane>
       <ImageView fitHeight="25.0" fitWidth="23.0" layoutX="19.0" layoutY="766.0" rotate="180.0">
@@ -429,5 +477,101 @@
          </image>
       </ImageView>
       <Button layoutX="15.0" layoutY="766.0" mnemonicParsing="false" onAction="#gotoLogin" opacity="0.0" text="Button" />
+      <Pane fx:id="flagUnresolvable" layoutX="230.0" layoutY="81.0" prefHeight="731.0" prefWidth="906.0" visible="false">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="695.0" layoutX="14.0" layoutY="14.0" opacity="0.74" stroke="BLACK" strokeType="INSIDE" width="878.0" />
+            <Rectangle arcHeight="34.0" arcWidth="34.0" fill="WHITE" height="384.0" layoutX="279.0" layoutY="172.0" stroke="BLACK" strokeType="INSIDE" width="345.0" />
+            <ImageView fitHeight="143.0" fitWidth="345.0" layoutX="279.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Icons/updateRec.png" />
+               </image>
+            </ImageView>
+            <Circle fill="WHITE" layoutX="452.0" layoutY="246.0" radius="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Text layoutX="319.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flag Ticket as Unresolvable?" textAlignment="CENTER" wrappingWidth="271.1523437500001">
+               <font>
+                  <Font name="Arial Bold" size="27.0" />
+               </font>
+            </Text>
+            <Text layoutX="321.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By confirming, you acknowledge that all actions to">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="341.0" layoutY="427.0" strokeType="OUTSIDE" strokeWidth="0.0" text="address the complaint are complete. Once">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="368.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and the ticket will be closed.">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle arcHeight="15.0" arcWidth="15.0" fill="WHITE" height="34.0" layoutX="299.0" layoutY="499.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
+            <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#232f3e" height="34.0" layoutX="463.0" layoutY="499.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="146.0" />
+            <Text layoutX="354.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cancel">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="516.0" layoutY="520.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="327.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="confirmed, the resolution is marked as resolved,">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="312.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This action is irreversible and cannot be undone.">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="70.0" fitWidth="70.0" layoutX="417.0" layoutY="211.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Icons/tick%201.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="463.0" layoutY="497.0" mnemonicParsing="false" onAction="#confirmUnresolvable" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
+            <Button layoutX="298.0" layoutY="498.0" mnemonicParsing="false" onAction="#cancelUnresolvable" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
+         </children>
+      </Pane>
+      <Pane fx:id="returnTicketPane" layoutX="222.0" layoutY="68.0" prefHeight="731.0" prefWidth="906.0" visible="false">
+         <children>
+            <Rectangle arcHeight="20.0" arcWidth="20.0" height="695.0" layoutX="14.0" layoutY="14.0" opacity="0.74" stroke="BLACK" strokeType="INSIDE" width="878.0" />
+            <Rectangle arcHeight="34.0" arcWidth="34.0" fill="WHITE" height="384.0" layoutX="279.0" layoutY="172.0" stroke="BLACK" strokeType="INSIDE" width="345.0" />
+            <ImageView fitHeight="143.0" fitWidth="345.0" layoutX="279.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Icons/returngroup.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="358.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return Ticket to Admin?" textAlignment="CENTER" wrappingWidth="189.80706787109375">
+               <font>
+                  <Font name="Arial Bold" size="27.0" />
+               </font>
+            </Text>
+            <Text layoutX="330.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are about to return this ticket to the admin team. This process ensures that the ticket is correctly categorized and handled by the appropriate team for resolution." textAlignment="CENTER" wrappingWidth="244.20703125">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#fb1616" height="34.0" layoutX="299.0" layoutY="499.0" stroke="#fb1616" strokeType="INSIDE" width="146.0" />
+            <Rectangle arcHeight="15.0" arcWidth="15.0" fill="WHITE" height="34.0" layoutX="463.0" layoutY="499.0" stroke="BLACK" strokeType="INSIDE" width="146.0" />
+            <Text fill="WHITE" layoutX="354.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cancel">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="516.0" layoutY="520.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Text>
+            <Button layoutX="463.0" layoutY="497.0" mnemonicParsing="false" onAction="#confirmReturnTicket" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
+            <Button layoutX="298.0" layoutY="498.0" mnemonicParsing="false" onAction="#cancelReturnTicket" opacity="0.0" prefHeight="36.0" prefWidth="149.0" text="Button" />
+         </children>
+      </Pane>
    </children>
 </Pane>

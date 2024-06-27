@@ -1,13 +1,13 @@
 package Model;
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class complaint_history {
     int history_ID;
     int resolution_ID;
-    Date history_Date;
+    LocalDate history_Date;
     String history_Status;
 
-    public complaint_history(int history_ID, int resolution_ID, Date history_Date, String history_Status) {
+    public complaint_history(int history_ID, int resolution_ID, LocalDate history_Date, String history_Status) {
         this.history_ID = history_ID;
         this.resolution_ID = resolution_ID;
         this.history_Date = history_Date;
@@ -30,11 +30,11 @@ public class complaint_history {
         this.resolution_ID = resolution_ID;
     }
 
-    public Date getHistory_Date() {
+    public LocalDate getHistory_Date() {
         return history_Date;
     }
 
-    public void setHistory_Date(Date history_Date) {
+    public void setHistory_Date(LocalDate history_Date) {
         this.history_Date = history_Date;
     }
 
@@ -45,5 +45,4 @@ public class complaint_history {
     public void setHistory_Status(String history_Status) {
         this.history_Status = history_Status;
     }
-    
 }
